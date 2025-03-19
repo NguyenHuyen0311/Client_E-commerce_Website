@@ -11,6 +11,8 @@
 body {
     font-family: "Noto Sans", sans-serif;
     font-optical-sizing: auto;
+    background: #f5f5f5;
+    color: rgba(0, 0, 0, 0.9) !important;
 }
 
 .container {
@@ -19,7 +21,7 @@ body {
 }
 
 .link:hover {
-    color: #ff5252;
+    color: #ff5252 !important;
 }
 
 .MuiBadge-badge {

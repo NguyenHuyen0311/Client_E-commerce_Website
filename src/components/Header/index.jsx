@@ -9,6 +9,7 @@ import { FaRegHeart } from "react-icons/fa6";
 import Tooltip from "@mui/material/Tooltip";
 import { AiFillPhone } from "react-icons/ai";
 import { FaFacebook , FaInstagram } from "react-icons/fa";
+import Navigation from "./Navigation";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -21,18 +22,18 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function Header() {
   return (
-    <header>
+    <header className="bg-white">
       <div className="top-strip py-2 border-t-[1px] border-gray-200 border-b-[1px]">
         <div className="container">
           <div className="flex items-center justify-between">
             <div className="col1 w-[50%]">
               <p className="text-[12px] font-[400] flex items-center gap-2">
-                <AiFillPhone className="text-[16px]" /> +84 966 556 026 | 
+                <AiFillPhone className="text-[16px]" /> +84 966 556 026 | Kết nối
                 <a href="https://fb.com/onimarket" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-600 hover:underline">
-                <FaFacebook className="text-[13px]" /> fb.com/Onimarket
-                </a> | 
+                <FaFacebook className="text-[15px]" /> 
+                </a> 
                 <a href="https://instagram.com/onimarket" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-pink-500 hover:underline">
-                <FaInstagram className="text-[16px]" /> @Onimarket
+                <FaInstagram className="text-[16px]" /> 
                 </a>
               </p>
             </div>
@@ -61,7 +62,7 @@ function Header() {
         </div>
       </div>
 
-      <div className="header">
+      <div className="header py-3 border-b-[1px] border-gray-200">
         <div className="container flex items-center justify-between">
           <div className="col1 w-[25%]">
             <Link to="/" className="logo">
@@ -115,6 +116,8 @@ function Header() {
           </div>
         </div>
       </div>
+
+      <Navigation />
     </header>
   );
 }
