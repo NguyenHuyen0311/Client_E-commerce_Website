@@ -146,9 +146,9 @@ function Navigation() {
             </div>
           </div>
           <div className="col-2 w-[60%]">
-            <ul className="flex items-center gap-5">
+            <ul className="flex items-center gap-4 mr-1">
               <li className="list-none">
-                <Link to="/" className="link trasition text-[14.5px]">
+                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
                   Trang chủ
                 </Link>
               </li>
@@ -172,7 +172,7 @@ function Navigation() {
                   )}
 
                   {openMenu === category.name && category.subcategories && (
-                    <div className="absolute left-0 mt-3.5 w-48 bg-white shadow-lg rounded-md z-10">
+                    <div className="absolute left-0 mt-3.5 w-48 bg-white shadow-lg rounded-md z-50">
                       <ul className="py-2">
                         {category.subcategories.map((sub) => (
                           <li
@@ -195,7 +195,7 @@ function Navigation() {
                             )}
 
                             {openSubMenu === sub.name && sub.subcategories && (
-                              <div className="absolute left-full top-0 ml-2 w-48 bg-white shadow-lg rounded-md z-10">
+                              <div className="absolute left-full top-0 ml-2 w-48 bg-white shadow-lg rounded-md z-50">
                                 <ul className="py-2">
                                   {sub.subcategories.map((subSub) => (
                                     <li key={subSub.name}>
