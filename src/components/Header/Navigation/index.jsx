@@ -146,14 +146,38 @@ function Navigation() {
             </div>
           </div>
           <div className="col-2 w-[60%]">
-            <ul className="flex items-center gap-4 mr-1">
+            <ul className="flex items-center !gap-10 mr-1">
               <li className="list-none">
                 <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
                   Trang chủ
                 </Link>
               </li>
 
-              {categories.map((category) => (
+              <li className="list-none">
+                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
+                  Cửa hàng
+                </Link>
+              </li>
+
+              <li className="list-none">
+                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
+                  Giới thiệu
+                </Link>
+              </li>
+
+              <li className="list-none">
+                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
+                  Bài viết
+                </Link>
+              </li>
+
+              <li className="list-none">
+                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
+                  Liên hệ
+                </Link>
+              </li>
+
+              {/* {categories.map((category) => (
                 <li
                   key={category.name}
                   className="relative list-none cursor-pointer"
@@ -216,7 +240,7 @@ function Navigation() {
                     </div>
                   )}
                 </li>
-              ))}
+              ))} */}
             </ul>
           </div>
           <div className="col-2 w-[15%]">

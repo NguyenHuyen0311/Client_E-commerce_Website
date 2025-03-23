@@ -16,6 +16,19 @@ body {
     overflow-x: hidden;
 }
 
+::-webkit-scrollbar {
+  width: 7px !important;
+  height: 7px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc!important;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff!important;
+}
+
 .container {
   width: 90%;
   margin: auto;
@@ -53,7 +66,7 @@ body {
   color: #000;
 }
 
-.category-slider-home {
+.category-slider-home, .slider-home {
   overflow: inherit !important;
 }
 
@@ -68,7 +81,7 @@ body {
 .category-slider-home .item-category-slider:hover img {
   transform: scale(1.1);
 }
-/* 
+
 .home-category-slider-container .swiper-button-prev, 
 .home-category-slider-container .swiper-button-next {
   width: 30px;
@@ -89,12 +102,30 @@ body {
   font-size: 15px !important;
 }
 
+.home-slider-container .swiper-button-prev:hover, 
+.home-slider-container .swiper-button-next:hover,
 .home-category-slider-container .swiper-button-prev:hover, 
 .home-category-slider-container .swiper-button-next:hover {
   background: #ff5252 !important;
 }
 
+.home-slider-container .swiper-button-prev:hover:after,
+.home-slider-container .swiper-button-next:hover:after,
 .home-category-slider-container .swiper-button-prev:hover:after,
 .home-category-slider-container .swiper-button-next:hover:after {
   color: #fff !important;
-} */
+}
+
+.css-1usuzwp-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: #ff5252 !important;
+}
+
+.MuiTabs-indicator {
+  background-color: #ff5252 !important;
+}
+
+.products-slider .swiper-wrapper {
+  padding: 15px;
+  margin-left: -15px;
+  margin-right: -15px;
+}
