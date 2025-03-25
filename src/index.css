@@ -129,3 +129,23 @@ body {
   margin-left: -15px;
   margin-right: -15px;
 }
+
+.swiper-pagination-bullet-active {
+  background: #ff5252 !important;
+}
+
+/* Button */
+.btn-org {
+  background-color: #ff5252 !important;
+  color: #fff !important;
+}
+
+.btn-org:hover {
+  background-color: #000 !important;
+  color: #fff;
+}
+
+.swiper-fade .swiper-slide-active .info {
+  transform: translateX(0);
+  opacity: 1;
+}
