@@ -15,7 +15,6 @@ import "swiper/css/navigation";
 
 import { Navigation } from "swiper/modules";
 import BlogItem from "../../components/BlogItem";
-import Footer from "../../components/Footer";
 import HomeProductSaleBanner from "../../components/HomeProductSaleBanner";
 import HomeProductSaleBannerMini from "../../components/HomeProductSaleBannerMini";
 
@@ -157,8 +156,6 @@ function Home() {
           </Swiper>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

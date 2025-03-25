@@ -1,0 +1,29 @@
+.sidebar .scroll {
+    max-height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.css-19opgx6-MuiFormControlLabel-root .MuiFormControlLabel-label {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.range-slider {
+    height: 3px !important;
+}
+
+.range-slider .range-slider__thumb {
+    width: 14px !important;
+    height: 14px !important;
+    background: #ff5252 !important;
+}
+
+.range-slider .range-slider__range {
+    background: #ff5252 !important;
+    height: 3px !important;
+}
+
+.css-19opgx6-MuiFormControlLabel-root {
+    margin-right: 0 !important;
+}

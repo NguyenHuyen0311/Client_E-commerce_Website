@@ -11,7 +11,7 @@ import { MdZoomOutMap } from "react-icons/md";
 function ProductItem() {
   return (
     <div className='product-item rounded-md overflow-hidden border-1 border-solid border-[#ddd] transition-all shadow-lg'>
-        <div className='group img-wrapper w-[100%] rounded-md overflow-hidden relative'>
+        <div className='group img-wrapper w-[100%] rounded-t-md overflow-hidden relative'>
             <Link to="/">
               <div className='product-img h-[220px] overflow-hidden'>
                 <img src={banhbonglandaunanh1} className='w-full h-full object-cover' />

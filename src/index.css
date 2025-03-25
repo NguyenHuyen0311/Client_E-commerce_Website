@@ -17,8 +17,8 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 7px !important;
-  height: 7px !important;
+  width: 5px !important;
+  height: 5px !important;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -30,7 +30,7 @@ body {
 }
 
 .container {
-  width: 90%;
+  width: 95%;
   margin: auto;
 }
 
@@ -148,4 +148,30 @@ body {
 .swiper-fade .swiper-slide-active .info {
   transform: translateX(0);
   opacity: 1;
+}
+
+.MuiCheckbox-root {
+  padding: 7px !important;
+}
+
+.MuiCheckbox-root.Mui-checked {
+  color: #ff5252 !important;
+}
+
+.ReactCollapse--collapse {
+  transition: height 400ms;
+}
+
+.css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.item-view-actions button.active svg{
+  color: #ff5252 !important;
+}
+
+.Mui-selected.MuiPaginationItem-page {
+  background: #ff5252 !important;
+  color: #fff !important;
 }

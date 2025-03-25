@@ -132,7 +132,7 @@ function Navigation() {
                 onClick={() => {
                   setIsOpen(!isOpen);
                   if (isOpen) {
-                    setExpandedCategories([]); // Clear all expanded categories when closing
+                    setExpandedCategories([]); 
                   }
                 }}
               >
