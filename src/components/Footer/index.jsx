@@ -14,7 +14,7 @@ function Footer() {
         <div className="flex items-center justify-center gap-2 py-8">
           <div className="col flex items-center justify-center flex-col group w-[20%]">
             <LiaShippingFastSolid className="text-[40px] transition-all duration-300 group-hover:text-[#ff5252] group-hover:-translate-y-1" />
-            <h3 className="text-[17px] font-[500] mt-3">Miễn phí vận chuyển</h3>
+            <h3 className="text-[17px] font-[450] mt-3">Miễn phí vận chuyển</h3>
             <p className="text-[14px] text-[#474747] font-[500] mt-3 text-center">
               Cho đơn hàng trên 100.000đ
             </p>
@@ -22,7 +22,7 @@ function Footer() {
 
           <div className="col flex items-center justify-center flex-col group w-[20%]">
             <PiKeyReturn className="text-[40px] transition-all duration-300 group-hover:text-[#ff5252] group-hover:-translate-y-1" />
-            <h3 className="text-[17px] font-[500] mt-3">
+            <h3 className="text-[17px] font-[450] mt-3">
               Đổi trả trong 30 ngày
             </h3>
             <p className="text-[14px] text-[#474747] font-[500] mt-3 text-center">
@@ -32,7 +32,7 @@ function Footer() {
 
           <div className="col flex items-center justify-center flex-col group w-[20%]">
             <BsWallet2 className="text-[35px] transition-all duration-300 group-hover:text-[#ff5252] group-hover:-translate-y-1" />
-            <h3 className="text-[17px] font-[500] mt-3">Thanh toán an toàn</h3>
+            <h3 className="text-[17px] font-[450] mt-3">Thanh toán an toàn</h3>
             <p className="text-[14px] text-[#474747] font-[500] mt-3 text-center">
               Chấp nhận thẻ thanh toán
             </p>
@@ -40,7 +40,7 @@ function Footer() {
 
           <div className="col flex items-center justify-center flex-col group w-[20%]">
             <BiSupport className="text-[40px] transition-all duration-300 group-hover:text-[#ff5252] group-hover:-translate-y-1" />
-            <h3 className="text-[17px] font-[500] mt-3">Hỗ trợ 24/7</h3>
+            <h3 className="text-[17px] font-[450] mt-3">Hỗ trợ 24/7</h3>
             <p className="text-[14px] text-[#474747] font-[500] mt-3 text-center">
               Liên hệ bất cứ lúc nào
             </p>
@@ -65,7 +65,7 @@ function Footer() {
           </div>
 
           <div className="part-2 w-[22%] flex flex-col gap-3 text-left border-r-[1px] border-gray-200 pr-5">
-            <h2 className="font-semibold text-lg">Về chúng tôi</h2>
+            <h2 className="font-[500] text-lg">Về chúng tôi</h2>
             <ul className="list-none space-y-3">
               <li className="text-[#3e3e3e] text-[15px]" >
                 <Link to="/" className="hover:text-[#ff5252]">
@@ -96,7 +96,7 @@ function Footer() {
           </div>
 
           <div className="part-3 w-[22%] flex flex-col gap-3 text-left border-r-[1px] border-gray-200 pr-5">
-            <h2 className="font-semibold text-lg">Danh mục sản phẩm</h2>
+            <h2 className="font-[500] text-lg">Danh mục sản phẩm</h2>
             <ul className="list-none space-y-3">
               <li className="text-[#3e3e3e] text-[15px]">
                 <Link to="/" className="hover:text-[#ff5252]">
@@ -122,7 +122,7 @@ function Footer() {
           </div>
 
           <div className="part-4 w-[26%] flex flex-col gap-3 text-left">
-            <h2 className="font-semibold text-lg">Liên hệ với chúng tôi</h2>
+            <h2 className="font-[500] text-lg">Liên hệ với chúng tôi</h2>
             <Link to="mailto:onimarket@gmail.com" className="hover:text-[#ff5252] text-[#3e3e3e] text-[15px]">
               onimarket@gmail.com
             </Link>

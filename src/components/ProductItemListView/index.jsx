@@ -14,7 +14,7 @@ function ProductItemListView() {
     <div className="product-item rounded-md overflow-hidden border-1 border-solid border-[#ddd] bg-[#f1f1f1] p-4 gap-4 transition-all shadow-lg flex items-center">
       <div className="group img-wrapper w-[25%] rounded-t-md overflow-hidden relative">
         <Link to="/">
-          <div className="product-img h-[220px] overflow-hidden">
+          <div className="product-img h-[260px] overflow-hidden">
             <img
               src={banhbonglandaunanh1}
               className="w-full h-full object-cover"
@@ -67,7 +67,7 @@ function ProductItemListView() {
 
         <Button className="btn-org flex items-center gap-2 !px-5 !mt-3">
           <IoCartOutline className="!text-[20px]" />
-          <h2>Thêm vào giỏ hàng</h2>
+          <h2>Thêm vào giỏ</h2>
         </Button>
       </div>
     </div>
