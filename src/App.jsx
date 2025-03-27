@@ -1,25 +1,86 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Header from './components/Header'
-import Home from './pages/Home'
-import ProductList from './pages/ProductList'
-import Footer from './components/Footer'
-import ProductDetails from './pages/ProductDetails'
+import React, { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import ProductList from "./pages/ProductList";
+import Footer from "./components/Footer";
+import ProductDetails from "./pages/ProductDetails";
+import { createContext } from "react";
+
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import ProductZoom from "./components/ProductZoom";
+import { IoMdClose } from "react-icons/io";
+import ProductDetailsContent from "./components/ProductDetailsContent";
+
+const myContext = createContext();
 
 function App() {
+  const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
+  const [fullWidth, setFullWidth] = React.useState(true);
+  const [maxWidth, setMaxWidth] = React.useState('lg');
+
+  const handleCloseProductDetailsModal = () => {
+    setOpenProductDetailsModal(false);
+  };
+
+  const values = {
+    setOpenProductDetailsModal
+  }
+
   return (
     <>
       <BrowserRouter>
-        <Header/>
-        <Routes>
-          <Route path="/" exact={true} element={<Home/>}/>
-          <Route path="/product-list" exact={true} element={<ProductList/>}/>
-          <Route path="/product-details/:id" exact={true} element={<ProductDetails/>}/>
-        </Routes>
-        <Footer />
+        <myContext.Provider value={values}>
+          <Header />
+          <Routes>
+            <Route path="/" exact={true} element={<Home />} />
+            <Route
+              path="/product-list"
+              exact={true}
+              element={<ProductList />}
+            />
+            <Route
+              path="/product-details/:id"
+              exact={true}
+              element={<ProductDetails />}
+            />
+          </Routes>
+          <Footer />
+        </myContext.Provider>
       </BrowserRouter>
+
+      <Dialog
+        open={openProductDetailsModal}
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        onClose={handleCloseProductDetailsModal}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        className="product-details-modal"
+      >
+        <DialogContent>
+          <div className="relative flex items-center w-full product-details-modal-wrap">
+            <Button className="!w-[33px] !h-[33px] !bg-[#f1f1f1] !min-w-[33px] !rounded-full !text-[#000] !absolute top-[10px] right-[10px]" onClick={handleCloseProductDetailsModal}>
+              <IoMdClose className="text-[20px]" />
+            </Button>
+            
+            <div className="col-1 w-[40%] px-3 py-8">
+              <ProductZoom />
+            </div>
+
+            <div className="col-2 w-[60%] px-7 py-8 product-content-container">
+              <ProductDetailsContent />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
+
+export {myContext};

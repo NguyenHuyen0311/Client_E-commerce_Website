@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import banhbonglandaunanh1 from "../../assets/image/banhbonglandaunanh.png";
 import banhbonglandaunanh2 from "../../assets/image/banhbonglandaunanh2.png";
 import "./productItem.css";
@@ -8,11 +8,14 @@ import Button from "@mui/material/Button";
 import { FaRegHeart } from "react-icons/fa";
 import { MdZoomOutMap } from "react-icons/md";
 import { IoCartOutline } from "react-icons/io5";
+import { myContext } from '../../App';
 
 function ProductItemListView() {
+  const context = useContext(myContext);
+
   return (
     <div className="product-item rounded-md overflow-hidden border-1 border-solid border-[#ddd] bg-[#f1f1f1] p-4 gap-4 transition-all shadow-lg flex items-center">
-      <div className="group img-wrapper w-[25%] rounded-t-md overflow-hidden relative">
+      <div className="group img-wrapper w-[30%] rounded-t-md overflow-hidden relative">
         <Link to="/">
           <div className="product-img h-[260px] overflow-hidden">
             <img
@@ -29,7 +32,7 @@ function ProductItemListView() {
           -33%
         </div>
         <div className="actions absolute top-[-200px] right-[15px] flex items-center gap-2 flex-col w-[30px] transition-all duration-500 group-hover:top-[10px] opacity-0 group-hover:opacity-100">
-          <Button className="!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center">
+          <Button onClick={() => context.setOpenProductDetailsModal(true)}  className="!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center">
             <MdZoomOutMap className="text-[18px]" />
           </Button>
           <Button className="!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center">
@@ -38,7 +41,7 @@ function ProductItemListView() {
         </div>
       </div>
 
-      <div className="product-info p-3 py-5 w-[75%]">
+      <div className="product-info p-3 w-[70%]">
         <h6 className="text-[15px] text-[#3b3a3a] product-brand">
           <Link to="/" className="link transition-all">
             Yipin

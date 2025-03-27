@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import banhbonglandaunanh1 from "../../assets/image/banhbonglandaunanh.png";
 import banhbonglandaunanh2 from "../../assets/image/banhbonglandaunanh2.png";
 import "./productItem.css";
@@ -7,8 +7,11 @@ import Rating from '@mui/material/Rating';
 import { Button } from '@mui/material';
 import { FaRegHeart } from "react-icons/fa";
 import { MdZoomOutMap } from "react-icons/md";
+import { myContext } from '../../App';
 
 function ProductItem() {
+  const context = useContext(myContext);
+
   return (
     <div className='product-item rounded-md overflow-hidden border-1 border-solid border-[#ddd] transition-all shadow-lg'>
         <div className='group img-wrapper w-[100%] rounded-t-md overflow-hidden relative'>
@@ -22,7 +25,7 @@ function ProductItem() {
               -33%
             </div>
             <div className='actions absolute top-[-200px] right-[15px] flex items-center gap-2 flex-col w-[30px] transition-all duration-500 group-hover:top-[10px] opacity-0 group-hover:opacity-100'>
-              <Button className='!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center'>
+              <Button onClick={() => context.setOpenProductDetailsModal(true)} className='!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center'>
                 <MdZoomOutMap className='text-[18px]' />
               </Button>
               <Button className='!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center'>
