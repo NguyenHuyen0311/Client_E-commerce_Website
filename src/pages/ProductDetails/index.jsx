@@ -4,6 +4,7 @@ import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
 import ProductsSlider from "../../components/ProductsSlider";
 import ProductDetailsContent from "../../components/ProductDetailsContent";
+import TextField from "@mui/material/TextField";
 
 function ProductDetails() {
   const [activeTab, setActiveTab] = useState(0);
@@ -99,10 +100,19 @@ function ProductDetails() {
                   Để lại đánh giá của bạn
                 </h2>
 
-                <textarea
-                  className="w-full h-24 border bg-[#fafafa] p-2 rounded-sm outline-none text-[14px] placeholder:text-[13px]"
-                  placeholder="Viết đánh giá..."
-                ></textarea>
+                <form className="w-full">
+                  <TextField
+                    className="w-full"
+                    id="outlined-multiline-flexible"
+                    label="Viết đánh giá..."
+                    multiline
+                    rows={4}
+                    maxRows={4}
+                    InputLabelProps={{
+                      style: { fontSize: "14px" },
+                    }}
+                  />
+                </form>
 
                 <Rating name="size-medium" defaultValue={1} className="mt-4" />
 

@@ -8,9 +8,9 @@ import Footer from "./components/Footer";
 import ProductDetails from "./pages/ProductDetails";
 import { createContext } from "react";
 
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 import ProductZoom from "./components/ProductZoom";
 import { IoMdClose } from "react-icons/io";
 import ProductDetailsContent from "./components/ProductDetailsContent";
@@ -21,16 +21,24 @@ const myContext = createContext();
 
 function App() {
   const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
-  const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState('lg');
+  const [fullWidth, setFullWidth] = useState(true);
+  const [maxWidth, setMaxWidth] = useState("lg");
+  const [openCartPanel, setOpenCartPanel] = useState(false);
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal(false);
   };
 
+  const toggleDrawerCartPanel = (newOpen) => () => {
+    setOpenCartPanel(newOpen);
+  };
+
   const values = {
-    setOpenProductDetailsModal
-  }
+    setOpenProductDetailsModal,
+    setOpenCartPanel,
+    toggleDrawerCartPanel,
+    openCartPanel,
+  };
 
   return (
     <>
@@ -49,16 +57,8 @@ function App() {
               exact={true}
               element={<ProductDetails />}
             />
-            <Route
-              path="/login"
-              exact={true}
-              element={<Login />}
-            />
-            <Route
-              path="/register"
-              exact={true}
-              element={<Register />}
-            />
+            <Route path="/login" exact={true} element={<Login />} />
+            <Route path="/register" exact={true} element={<Register />} />
           </Routes>
           <Footer />
         </myContext.Provider>
@@ -75,10 +75,13 @@ function App() {
       >
         <DialogContent>
           <div className="relative flex items-center w-full product-details-modal-wrap">
-            <Button className="!w-[33px] !h-[33px] !bg-[#f1f1f1] !min-w-[33px] !rounded-full !text-[#000] !absolute top-[10px] right-[10px]" onClick={handleCloseProductDetailsModal}>
+            <Button
+              className="!w-[33px] !h-[33px] !bg-[#f1f1f1] !min-w-[33px] !rounded-full !text-[#000] !absolute top-[10px] right-[10px]"
+              onClick={handleCloseProductDetailsModal}
+            >
               <IoMdClose className="text-[20px]" />
             </Button>
-            
+
             <div className="col-1 w-[40%] px-3 py-8">
               <ProductZoom />
             </div>
@@ -95,4 +98,4 @@ function App() {
 
 export default App;
 
-export {myContext};
+export { myContext };
