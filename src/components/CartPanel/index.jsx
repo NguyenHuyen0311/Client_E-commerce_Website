@@ -1,9 +1,12 @@
 import Button from "@mui/material/Button";
-import React from "react";
+import React, { useContext } from "react";
 import { MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { myContext } from "../../App";
 
 function CartPanel() {
+  const context = useContext(myContext);
+
   return (
     <div>
       <div className="scroll py-3 px-3 w-full max-h-[65vh] overflow-y-scroll overflow-x-hidden">
@@ -65,7 +68,7 @@ function CartPanel() {
           </div>
 
           <div className="flex items-center mt-5 gap-5 w-full justify-between">
-            <Link to="/cart" className="w-[50%]">
+            <Link to="/cart" className="w-[50%]" onClick={context.toggleDrawerCartPanel(false)}>
               <Button className="btn-org w-full">Xem giỏ hàng</Button>
             </Link>
             <Link to="checkout" className="w-[50%]">

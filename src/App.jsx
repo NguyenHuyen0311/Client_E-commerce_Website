@@ -16,6 +16,7 @@ import { IoMdClose } from "react-icons/io";
 import ProductDetailsContent from "./components/ProductDetailsContent";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Cart from "./pages/Cart";
 
 const myContext = createContext();
 
@@ -59,6 +60,7 @@ function App() {
             />
             <Route path="/login" exact={true} element={<Login />} />
             <Route path="/register" exact={true} element={<Register />} />
+            <Route path="/cart" exact={true} element={<Cart />} />
           </Routes>
           <Footer />
         </myContext.Provider>
