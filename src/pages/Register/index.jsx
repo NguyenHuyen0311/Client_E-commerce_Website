@@ -22,12 +22,13 @@ function Register() {
                 className="w-full"
                 id="name"
                 type="text"
-                label="Họ và Tên *"
+                label="Họ và Tên"
                 variant="outlined"
                 size="small"
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
+                required
               />
             </div>
 
@@ -36,12 +37,13 @@ function Register() {
                 className="w-full"
                 id="email"
                 type="email"
-                label="Email *"
+                label="Email"
                 variant="outlined"
                 size="small"
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
+                required
               />
             </div>
 
@@ -50,12 +52,13 @@ function Register() {
                 className="w-full"
                 id="password"
                 type={isShowPassword ? "password" : "text"}
-                label="Mật khẩu *"
+                label="Mật khẩu"
                 variant="outlined"
                 size="small"
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
+                required
               />
 
               <Button

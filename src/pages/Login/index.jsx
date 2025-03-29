@@ -36,12 +36,13 @@ function Login() {
                 name="email"
                 id="email"
                 type="email"
-                label="Email *"
+                label="Email"
                 variant="outlined"
                 size="small"
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
+                required
               />
             </div>
 
@@ -51,12 +52,13 @@ function Login() {
                 name="password"
                 id="password"
                 type={isShowPassword ? "password" : "text"}
-                label="Mật khẩu *"
+                label="Mật khẩu"
                 variant="outlined"
                 size="small"
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
+                required
               />
 
               <Button

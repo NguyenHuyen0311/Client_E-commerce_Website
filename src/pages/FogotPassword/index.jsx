@@ -28,6 +28,7 @@ function ForgotPassword() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
+                required
               />
 
               <Button
@@ -58,6 +59,7 @@ function ForgotPassword() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
+                required
               />
 
               <Button

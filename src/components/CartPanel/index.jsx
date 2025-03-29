@@ -71,7 +71,7 @@ function CartPanel() {
             <Link to="/cart" className="w-[50%]" onClick={context.toggleDrawerCartPanel(false)}>
               <Button className="btn-org w-full">Xem giỏ hàng</Button>
             </Link>
-            <Link to="checkout" className="w-[50%]">
+            <Link to="/checkout" className="w-[50%]" onClick={context.toggleDrawerCartPanel(false)}>
               <Button
                 sx={{
                   backgroundColor: "#fff",
