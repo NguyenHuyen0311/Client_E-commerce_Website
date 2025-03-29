@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import { Link } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { myContext } from "../../App";
 
 function Login() {
-  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(true);
+  const [formFields, setFormFields] = useState({
+    email: "",
+    password: ""
+  });
+
+  const context = useContext(myContext);
+  const history = useNavigate();
+  
+  const forgotPassword = () => {
+      history("/verify");
+      context.openAlertBox("success", "Mã OTP đã được gửi!");
+  }
 
   return (
     <section className="section py-10">
@@ -20,6 +33,7 @@ function Login() {
             <div className="form-group w-full mb-5">
               <TextField
                 className="w-full"
+                name="email"
                 id="email"
                 type="email"
                 label="Email *"
@@ -34,6 +48,7 @@ function Login() {
             <div className="relative form-group w-full mb-3">
               <TextField
                 className="w-full"
+                name="password"
                 id="password"
                 type={isShowPassword ? "password" : "text"}
                 label="Mật khẩu *"
@@ -60,7 +75,7 @@ function Login() {
               </Button>
             </div>
 
-            <a className="link cursor-pointer text-[13px] font-[500]">
+            <a onClick={forgotPassword} className="link cursor-pointer text-[13px] font-[500]">
               Quên mật khẩu
             </a>
 

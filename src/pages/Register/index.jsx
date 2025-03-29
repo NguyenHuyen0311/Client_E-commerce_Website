@@ -6,7 +6,7 @@ import { Link } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 
 function Register() {
-  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(true);
 
   return (
     <section className="section py-10">
