@@ -245,7 +245,7 @@ function Navigation() {
           </div>
           <div className="col-2 w-[15%]">
             <p className="text-[14px] font-[400] flex items-center gap-2">
-              <FaShippingFast className="text-[18px]" /> Chỉ ship trong khu vực Hà Nội
+              <FaShippingFast className="!min-w-[20px] text-[18px]" /> Chỉ ship trong khu vực Hà Nội
             </p>
           </div>
         </div>

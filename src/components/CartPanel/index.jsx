@@ -72,21 +72,7 @@ function CartPanel() {
               <Button className="btn-org w-full">Xem giỏ hàng</Button>
             </Link>
             <Link to="/checkout" className="w-[50%]" onClick={context.toggleDrawerCartPanel(false)}>
-              <Button
-                sx={{
-                  backgroundColor: "#fff",
-                  width: "100%",
-                  border: "1px solid #ff5252",
-                  color: "#ff5252",
-                  "&:hover": {
-                    border: "1px solid #000",
-                    backgroundColor: "#000",
-                    color: "#fff",
-                  },
-                }}
-              >
-                Thanh toán
-              </Button>
+            <Button className="btn-border w-full">Thanh toán</Button>
             </Link>
           </div>
         </div>

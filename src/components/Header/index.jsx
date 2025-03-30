@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Search from "../Search";
 import Badge from "@mui/material/Badge";
@@ -15,6 +15,14 @@ import { myContext } from "../../App";
 import Drawer from "@mui/material/Drawer";
 import CartPanel from "../CartPanel";
 import { IoMdClose } from "react-icons/io";
+import Button from "@mui/material/Button";
+import { FaRegUser } from "react-icons/fa";
+
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { IoBagCheckOutline } from "react-icons/io5";
+import { IoLocationOutline } from "react-icons/io5";
+import { IoIosLogOut } from "react-icons/io";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -27,6 +35,15 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function Header() {
   const context = useContext(myContext);
+
+  const [anchorElAccountMenu, setAnchorElAccountMenu] = useState(null);
+  const openAccountMenu = Boolean(anchorElAccountMenu);
+  const handleClickMyAccout = (event) => {
+    setAnchorElAccountMenu(event.currentTarget);
+  };
+  const handleCloseAccountMenu = () => {
+    setAnchorElAccountMenu(null);
+  };
 
   return (
     <header className="bg-white">
@@ -90,26 +107,142 @@ function Header() {
               />
             </Link>
           </div>
-          <div className="col2 w-[45%]">
+          <div className="col2 w-[40%]">
             <Search />
           </div>
-          <div className="col3 w-[30%] flex items-center pl-7">
+          <div className="col3 w-[35%] flex items-center pl-7">
             <ul className="flex items-center justify-end gap-3 w-full">
-              <li className="list-none">
-                <Link
-                  to="/login"
-                  className="text-[15px] link transition font-[400]"
-                >
-                  Đăng nhập
-                </Link>{" "}
-                /{" "}
-                <Link
-                  to="/register"
-                  className="text-[15px] link transition font-[400]"
-                >
-                  Đăng ký
-                </Link>
-              </li>
+              {context.isLogin === false ? (
+                <>
+                  <li className="list-none">
+                    <Link
+                      to="/login"
+                      className="text-[15px] link transition font-[400]"
+                    >
+                      Đăng nhập
+                    </Link>{" "}
+                    /{" "}
+                    <Link
+                      to="/register"
+                      className="text-[15px] link transition font-[400]"
+                    >
+                      Đăng ký
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleClickMyAccout}
+                    className="my-account-wrap !text-[#000] cursor-pointer flex items-center gap-3"
+                  >
+                    <Button className="!rounded-full !bg-[#f1f1f1] !min-w-[40px] !h-[40px] !w-[40px]">
+                      <FaRegUser className="text-[16px] text-black/70" />
+                    </Button>
+
+                    <div className="info flex flex-col">
+                      <h4 className="text-[13px] leading-4 text-black/70 font-[500] normal-case text-left justify-start">
+                        Huyền Nguyễn
+                      </h4>
+                      <span className="text-[12px] text-black/60 font-[500] normal-case text-left justify-start">
+                        huyenmeroria@gmail.com
+                      </span>
+                    </div>
+                  </Button>
+
+                  <Menu
+                    anchorEl={anchorElAccountMenu}
+                    id="account-menu"
+                    open={openAccountMenu}
+                    onClose={handleCloseAccountMenu}
+                    onClick={handleCloseAccountMenu}
+                    slotProps={{
+                      paper: {
+                        elevation: 0,
+                        sx: {
+                          overflow: "visible",
+                          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                          mt: 1.5,
+                          "& .MuiAvatar-root": {
+                            width: 32,
+                            height: 32,
+                            ml: -0.5,
+                            mr: 1,
+                          },
+                          "&::before": {
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            top: 0,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            bgcolor: "background.paper",
+                            transform: "translateY(-50%) rotate(45deg)",
+                            zIndex: 0,
+                          },
+                        },
+                      },
+                    }}
+                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                  >
+                    <Link to="/my-account" className="w-full block">
+                      <MenuItem
+                        onClick={handleCloseAccountMenu}
+                        className="!flex items-center gap-2"
+                      >
+                        <FaRegUser className="text-[15px] text-black/70" />
+                        <span className="text-[14px] font-[500]">
+                          Tài khoản
+                        </span>
+                      </MenuItem>
+                    </Link>
+
+                    <Link to="/my-address" className="w-full block">
+                      <MenuItem
+                        onClick={handleCloseAccountMenu}
+                        className="!flex items-center gap-2"
+                      >
+                        <IoLocationOutline className="text-[16px]" />
+                        <span className="text-[14px] font-[500]">Địa chỉ</span>
+                      </MenuItem>
+                    </Link>
+
+                    <Link to="/my-orders" className="w-full block">
+                      <MenuItem
+                        onClick={handleCloseAccountMenu}
+                        className="!flex items-center gap-2"
+                      >
+                        <IoBagCheckOutline className="text-[16px]" />
+                        <span className="text-[14px] font-[500]">
+                          Đơn đặt hàng
+                        </span>
+                      </MenuItem>
+                    </Link>
+
+                    <Link to="/my-wishlist" className="w-full block">
+                      <MenuItem
+                        onClick={handleCloseAccountMenu}
+                        className="!flex items-center gap-2"
+                      >
+                        <FaRegHeart className="text-[15px] text-black/70" />
+                        <span className="text-[14px] font-[500]">
+                          Danh sách yêu thích
+                        </span>
+                      </MenuItem>
+                    </Link>
+
+                    <MenuItem
+                      onClick={handleCloseAccountMenu}
+                      className="!flex items-center gap-2"
+                    >
+                      <IoIosLogOut className="text-[16px]" />
+                      <span className="text-[14px] font-[500]">Đăng xuất</span>
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
 
               <li>
                 <Tooltip title="Yêu thích">
