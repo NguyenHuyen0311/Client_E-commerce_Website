@@ -8,7 +8,7 @@ function MyWishlistItem() {
     <div className="viewcart-item pb-5 border-b relative w-full p-3 flex items-center gap-4">
       <IoMdClose className="cursor-pointer absolute top-[15px] link transition-all right-[15px] text-[22px]" />
 
-      <div className="img w-[20%] rounded-md overflow-hidden">
+      <div className="img w-[15%] rounded-md overflow-hidden">
         <Link to="/product/333" className="group">
           <img
             src="https://serviceapi.spicezgold.com/download/1742462909156_gdgd1.jpg"
@@ -17,7 +17,7 @@ function MyWishlistItem() {
         </Link>
       </div>
 
-      <div className="info w-[80%]">
+      <div className="info w-[85%]">
         <span className="text-[12px] text-black/70 font-[400]">MCLUNE</span>
         <h3 className="text-[15px] font-[600]">
           <Link className="link transition-all">

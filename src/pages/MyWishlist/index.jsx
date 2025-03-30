@@ -1,13 +1,13 @@
 import React from "react";
 import MyWishlistItem from "./wishlistItem";
-import MyAccountSidebar from "../../components/AccountSideBar";
+import AccountSidebar from "../../components/AccountSideBar";
 
 function MyWishlist() {
   return (
     <section className="py-10 w-full">
       <div className="container flex gap-5">
         <div className="col-1 w-[25%]">
-          <MyAccountSidebar />
+          <AccountSidebar />
         </div>
 
         <div className="col-2 w-[75%]">

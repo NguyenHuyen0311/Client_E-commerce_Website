@@ -5,7 +5,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
 import { FaRegUser } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 import { IoMdCloudUpload } from "react-icons/io";
 
 function AccountSidebar() {
@@ -35,18 +35,20 @@ function AccountSidebar() {
 
       <ul className="my-account-tabs list-none pb-0 bg-[#f1f1f1] flex flex-col">
         <li className="w-full">
-          <NavLink to="/my-account" exact={true} activeClassName="isActive">
-            <Button className="w-full !px-5 !py-2 flex !text-left !items-center !justify-start gap-2 !rounded-none transition-all duration-300">
-              <FaRegUser className="text-[13px] text-black/80" />
-              <span className="text-[13px] font-[600] !text-black/80 normal-case">
-                Tài khoản
-              </span>
-            </Button>
+          <NavLink to="/my-account" activeClassName="isActive">
+            <div className="w-full">
+              <Button className="w-full !px-5 !py-2 flex !text-left !items-center !justify-start gap-2 !rounded-none transition-all duration-300">
+                <FaRegUser className="text-[13px] text-black/80" />
+                <span className="text-[13px] font-[600] !text-black/80 normal-case">
+                  Tài khoản
+                </span>
+              </Button>
+            </div>
           </NavLink>
         </li>
 
         <li className="w-full">
-          <NavLink to="/my-address" exact={true} activeClassName="isActive">
+          <NavLink to="/my-address" activeClassName="isActive">
             <Button className="w-full !px-5 !py-2  flex !text-left !items-center !justify-start gap-2 !rounded-none transition-all duration-300">
               <IoLocationOutline className="text-[13px] text-black/80" />
               <span className="text-[13px] mt-1 font-[600] !text-black/80 normal-case">
@@ -57,7 +59,7 @@ function AccountSidebar() {
         </li>
 
         <li className="w-full">
-          <NavLink to="/my-orders" exact={true} activeClassName="isActive">
+          <NavLink to="/my-orders" activeClassName="isActive">
             <Button className="w-full !px-5 !py-2  flex !text-left !items-center !justify-start gap-2 !rounded-none transition-all duration-300">
               <IoBagCheckOutline className="text-[13px] text-black/80" />
               <span className="text-[13px] mt-1 font-[600] !text-black/80 normal-case">
@@ -68,7 +70,7 @@ function AccountSidebar() {
         </li>
 
         <li className="w-full">
-          <NavLink to="/my-wishlist" exact={true} activeClassName="isActive">
+          <NavLink to="/my-wishlist" activeClassName="isActive">
             <Button className="w-full !px-5 !py-2  flex !text-left !items-center !justify-start gap-2 !rounded-none transition-all duration-300">
               <FaRegHeart className="text-[13px] text-black/80" />
               <span className="text-[13px] mt-1 font-[600] !text-black/80 normal-case">

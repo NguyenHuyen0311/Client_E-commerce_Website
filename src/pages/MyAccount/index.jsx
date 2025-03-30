@@ -1,14 +1,14 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import TextField from '@mui/material/TextField';
-import MyAccountSidebar from "../../components/AccountSideBar";
+import AccountSidebar from "../../components/AccountSideBar";
 
 function MyAccount() {
   return (
     <section className="py-10 w-full">
       <div className="container flex gap-5">
         <div className="col-1 w-[25%]">
-          <MyAccountSidebar />
+          <AccountSidebar />
         </div>
 
         <div className="col-2 w-[75%]">
@@ -44,7 +44,7 @@ function MyAccount() {
                 </div>
               </div>
               <div className="flex items-center mt-5">
-                <div className="w-[48.5%]">
+                <div className="w-[49%]">
                   <TextField
                     id="outlined-basic"
                     label="Số điện thoại"

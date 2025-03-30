@@ -125,7 +125,7 @@ function ProductDetails() {
         )}
       </div>
 
-      <div className="container pt-8">
+      <div className="container pt-8 pb-5">
         <h2 className="text-[20px] font-[700] text-[#3b3a3a]">
           Sản phẩm liên quan
         </h2>

@@ -154,25 +154,25 @@ function Navigation() {
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
+                <Link to="/product-list" className="link transition text-[14.5px] hover:text-[#ff5252]">
                   Cửa hàng
                 </Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
+                <Link to="/about-us" className="link transition text-[14.5px] hover:text-[#ff5252]">
                   Giới thiệu
                 </Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
+                <Link to="/blog" className="link transition text-[14.5px] hover:text-[#ff5252]">
                   Bài viết
                 </Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
+                <Link to="/contact" className="link transition text-[14.5px] hover:text-[#ff5252]">
                   Liên hệ
                 </Link>
               </li>

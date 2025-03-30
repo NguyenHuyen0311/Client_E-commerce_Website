@@ -8,7 +8,7 @@ import { FaFacebook, FaInstagram } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="pt-6 bg-white">
+    <footer className="bg-white">
       <hr />
       <div className="container">
         <div className="flex items-center justify-center gap-2 py-8">
