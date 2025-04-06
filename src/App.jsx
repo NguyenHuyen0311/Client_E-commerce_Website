@@ -35,7 +35,8 @@ function App() {
   const [maxWidth, setMaxWidth] = useState("lg");
   const [openCartPanel, setOpenCartPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
+  
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal(false);
   };
@@ -50,7 +51,7 @@ function App() {
     }
 
     if(status === "error") {
-      toast.success(message);
+      toast.error(message);
     }
   }
 
@@ -61,7 +62,7 @@ function App() {
     openCartPanel,
     openAlertBox,
     isLogin,
-    setIsLogin
+    setIsLogin,
   };
 
   return (

@@ -1,12 +1,79 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import { Link } from "@mui/material";
+import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { postData } from "../../utils/api";
+import { myContext } from "../../App";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [isShowPassword, setIsShowPassword] = useState(true);
+  const [formFields, setFormFields] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const context = useContext(myContext);
+  const history = useNavigate();
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setFormFields(() => {
+      return {
+        ...formFields,
+        [name]: value,
+      };
+    });
+  };
+
+  const validateValue = Object.values(formFields).every((el) => el);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setIsLoading(true);
+
+    if (formFields.name === "") {
+      context.openAlertBox("error", "Vui lòng nhập họ và tên!");
+      return false;
+    }
+
+    if (formFields.email === "") {
+      context.openAlertBox("error", "Vui lòng nhập email!");
+      return false;
+    }
+
+    if (formFields.password === "") {
+      context.openAlertBox("error", "Vui lòng nhập mật khẩu!");
+      return false;
+    }
+
+    postData("/api/user/register", formFields).then((res) => {
+      if(res?.error !== true) {
+        setIsLoading(false);
+        context.openAlertBox("success", res?.message);
+        localStorage.setItem("userEmail", formFields.email);
+        
+        setFormFields({
+          name: "",
+          email: "",
+          password: "",
+        });
+
+
+        history("/verify");
+      } else {
+        context.openAlertBox("error", res?.message);
+        setIsLoading(false);
+      }
+    });
+  };
 
   return (
     <section className="section py-10">
@@ -16,11 +83,14 @@ function Register() {
             Đăng Ký
           </h3>
 
-          <form className="w-full mt-5">
-          <div className="form-group w-full mb-5">
+          <form className="w-full mt-5" onSubmit={handleSubmit}>
+            <div className="form-group w-full mb-5">
               <TextField
                 className="w-full"
                 id="name"
+                name="name"
+                value={formFields.name}
+                disabled={isLoading===true ? true : false}
                 type="text"
                 label="Họ và Tên"
                 variant="outlined"
@@ -28,7 +98,7 @@ function Register() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
-                required
+                onChange={onChangeInput}
               />
             </div>
 
@@ -36,6 +106,9 @@ function Register() {
               <TextField
                 className="w-full"
                 id="email"
+                name="email"
+                value={formFields.email}
+                disabled={isLoading===true ? true : false}
                 type="email"
                 label="Email"
                 variant="outlined"
@@ -43,7 +116,7 @@ function Register() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
-                required
+                onChange={onChangeInput}
               />
             </div>
 
@@ -51,6 +124,9 @@ function Register() {
               <TextField
                 className="w-full"
                 id="password"
+                name="password"
+                value={formFields.password}
+                disabled={isLoading===true ? true : false}
                 type={isShowPassword ? "password" : "text"}
                 label="Mật khẩu"
                 variant="outlined"
@@ -58,7 +134,7 @@ function Register() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
-                required
+                onChange={onChangeInput}
               />
 
               <Button
@@ -78,7 +154,17 @@ function Register() {
             </div>
 
             <div className="flex items-center mt-4 mb-3">
-              <Button className="btn-org w-full">Đăng ký</Button>
+              <Button
+                type="submit"
+                disabled={!validateValue}
+                className="btn-org w-full flex gap-3"
+              >
+                {isLoading === true ? (
+                  <CircularProgress color="inherit" />
+                ) : (
+                  "Đăng ký"
+                )}
+              </Button>
             </div>
 
             <p className="text-[14px] w-full font-[400] flex items-center justify-center gap-2">

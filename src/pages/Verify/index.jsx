@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import OtpBox from "../../components/OtpBox";
 import Button from "@mui/material/Button";
+import { postData } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
+import { myContext } from "../../App";
 
 function Verify() {
   const [otp, setOtp] = useState("");
@@ -9,9 +12,24 @@ function Verify() {
     setOtp(value);
   };
 
+  const history = useNavigate();
+  const context = useContext(myContext);
+
   const verifyOTP = (e) => {
     e.preventDefault();
-    alert(otp);
+    
+    postData("/api/user/verify", {
+      email: localStorage.getItem("userEmail"),
+      otp: otp
+    }).then((res) => {
+      if(res?.error === false) {
+        context.openAlertBox("success", res?.message);
+        localStorage.removeItem("userEmail")
+        history("/login");
+      } else {
+        context.openAlertBox("error", res?.message);
+      }
+    })
   }
 
   return (
@@ -29,7 +47,7 @@ function Verify() {
           <p className="text-center text-[13px] mb-4">
             OTP được gửi vào{" "}
             <span className="text-[#ff5252] mt-2 font-bold">
-              huyen@gmail.com
+              {localStorage.getItem("userEmail")}
             </span>
           </p>
 

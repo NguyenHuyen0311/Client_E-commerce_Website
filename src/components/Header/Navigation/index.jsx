@@ -149,7 +149,7 @@ function Navigation() {
             <ul className="flex items-center !gap-10 mr-1">
               <li className="list-none">
                 <Link to="/" className="link transition text-[14.5px] hover:text-[#ff5252]">
-                  Trang chủ
+                    Trang chủ
                 </Link>
               </li>
 
@@ -212,7 +212,7 @@ function Navigation() {
                               className="block px-4 py-2 !text-[14.5px] !bg-transparent hover:text-[#ff5252] hover:!bg-transparent"
                             >
                               {sub.name}
-                            </Link>
+                </Link>
 
                             {openSubMenu && (
                               <div className="absolute left-full top-0 ml-[-4px] w-4 h-full bg-transparent"></div>
@@ -228,18 +228,18 @@ function Navigation() {
                                         className="block px-4 py-2 !text-[14.5px] !bg-transparent hover:text-[#ff5252] hover:!bg-transparent"
                                       >
                                         {subSub.name}
-                                      </Link>
-                                    </li>
+                </Link>
+              </li>
                                   ))}
                                 </ul>
                               </div>
                             )}
-                          </li>
+              </li>
                         ))}
                       </ul>
                     </div>
                   )}
-                </li>
+              </li>
               ))} */}
             </ul>
           </div>
@@ -314,7 +314,7 @@ function Navigation() {
                                     >
                                       {subSub.name}
                                     </Link>
-                                  </li>
+                </li>
                                 ))}
                               </ul>
                             </div>
@@ -327,11 +327,11 @@ function Navigation() {
                             {sub.name}
                           </Link>
                         )}
-                      </li>
+                </li>
                     ))}
-                  </ul>
+              </ul>
                 </div>
-              </li>
+            </li>
             ))}
           </ul>
         </div>
