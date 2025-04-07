@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Search from "../Search";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
@@ -36,6 +36,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function Header() {
   const context = useContext(myContext);
+  const history = useNavigate();
 
   const [anchorElAccountMenu, setAnchorElAccountMenu] = useState(null);
   const openAccountMenu = Boolean(anchorElAccountMenu);
@@ -57,6 +58,8 @@ function Header() {
         
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        
+        history("/");
       }
     });
   }
