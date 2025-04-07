@@ -5,21 +5,75 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { myContext } from "../../App";
+import CircularProgress from "@mui/material/CircularProgress";
+import { postData } from "../../utils/api";
 
 function Login() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [isShowPassword, setIsShowPassword] = useState(true);
   const [formFields, setFormFields] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const context = useContext(myContext);
   const history = useNavigate();
-  
+
   const forgotPassword = () => {
-      history("/verify");
-      context.openAlertBox("success", "Mã OTP đã được gửi!");
-  }
+    history("/verify");
+    context.openAlertBox("success", "Mã OTP đã được gửi!");
+  };
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setFormFields(() => {
+      return {
+        ...formFields,
+        [name]: value,
+      };
+    });
+  };
+
+  const validateValue = Object.values(formFields).every((el) => el);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setIsLoading(true);
+
+    if (formFields.email === "") {
+      context.openAlertBox("error", "Vui lòng nhập email!");
+      return false;
+    }
+
+    if (formFields.password === "") {
+      context.openAlertBox("error", "Vui lòng nhập mật khẩu!");
+      return false;
+    }
+
+    postData("/api/user/login", formFields).then((res) => {
+      if (res?.error !== true) {
+        setIsLoading(false);
+        context.openAlertBox("success", res?.message);
+
+        setFormFields({
+          email: "",
+          password: "",
+        });
+
+        localStorage.setItem("accessToken", res?.data?.accessToken);
+        localStorage.setItem("refreshToken", res?.data?.refreshToken);
+
+        context.setIsLogin(true);
+
+        history("/");
+      } else {
+        context.openAlertBox("error", res?.message);
+        setIsLoading(false);
+      }
+    });
+  };
 
   return (
     <section className="section py-10">
@@ -29,12 +83,14 @@ function Login() {
             Đăng Nhập
           </h3>
 
-          <form className="w-full mt-5">
+          <form className="w-full mt-5" onSubmit={handleSubmit}>
             <div className="form-group w-full mb-5">
               <TextField
                 className="w-full"
-                name="email"
                 id="email"
+                name="email"
+                value={formFields.email}
+                disabled={isLoading===true ? true : false}
                 type="email"
                 label="Email"
                 variant="outlined"
@@ -42,7 +98,7 @@ function Login() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
-                required
+                onChange={onChangeInput}
               />
             </div>
 
@@ -50,6 +106,8 @@ function Login() {
               <TextField
                 className="w-full"
                 name="password"
+                value={formFields.password}
+                disabled={isLoading===true ? true : false}
                 id="password"
                 type={isShowPassword ? "password" : "text"}
                 label="Mật khẩu"
@@ -58,7 +116,7 @@ function Login() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
-                required
+                onChange={onChangeInput}
               />
 
               <Button
@@ -77,12 +135,25 @@ function Login() {
               </Button>
             </div>
 
-            <a onClick={forgotPassword} className="link cursor-pointer text-[13px] font-[500]">
+            <a
+              onClick={forgotPassword}
+              className="link cursor-pointer text-[13px] font-[500]"
+            >
               Quên mật khẩu
             </a>
 
             <div className="flex items-center mt-4 mb-3">
-              <Button className="btn-org w-full">Đăng nhập</Button>
+              <Button
+                type="submit"
+                disabled={!validateValue}
+                className="btn-org w-full flex gap-3"
+              >
+                {isLoading === true ? (
+                  <CircularProgress color="inherit" />
+                ) : (
+                  "Đăng nhập"
+                )}
+              </Button>
             </div>
 
             <div className="flex items-center my-5">

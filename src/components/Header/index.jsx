@@ -23,6 +23,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
+import { fetchDataFromApi } from "../../utils/api";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -38,12 +39,27 @@ function Header() {
 
   const [anchorElAccountMenu, setAnchorElAccountMenu] = useState(null);
   const openAccountMenu = Boolean(anchorElAccountMenu);
+
   const handleClickMyAccout = (event) => {
     setAnchorElAccountMenu(event.currentTarget);
   };
+
   const handleCloseAccountMenu = () => {
     setAnchorElAccountMenu(null);
   };
+
+  const logout = () => {
+    setAnchorElAccountMenu(null);
+
+    fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem('accessToken')}`, { withCredentials: true }).then((res) => {
+      console.log(res);
+      if(res?.error === false) {
+        context.setIsLogin(false);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+      }
+    });
+  }
 
   return (
     <header className="bg-white">
@@ -142,10 +158,10 @@ function Header() {
 
                     <div className="info flex flex-col">
                       <h4 className="text-[13px] leading-4 text-black/70 font-[500] normal-case text-left justify-start">
-                        Huyền Nguyễn
+                        {context?.userData?.name}
                       </h4>
                       <span className="text-[12px] text-black/60 font-[500] normal-case text-left justify-start">
-                        huyenmeroria@gmail.com
+                        {context?.userData?.email}
                       </span>
                     </div>
                   </Button>
@@ -234,7 +250,7 @@ function Header() {
                     </Link>
 
                     <MenuItem
-                      onClick={handleCloseAccountMenu}
+                      onClick={logout}
                       className="!flex items-center gap-2"
                     >
                       <IoIosLogOut className="text-[16px]" />
