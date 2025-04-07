@@ -52,7 +52,6 @@ function App() {
       setIsLogin(true);
 
       fetchDataFromApi(`/api/user/user-details?token=${token}`).then((res) => {
-        console.log(res);
         setUserData(res.data);
       })
     } else {

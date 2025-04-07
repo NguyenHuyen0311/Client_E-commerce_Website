@@ -21,8 +21,26 @@ function Login() {
   const history = useNavigate();
 
   const forgotPassword = () => {
-    history("/verify");
-    context.openAlertBox("success", "Mã OTP đã được gửi!");
+    if(formFields.email === "") {
+      context.openAlertBox("error", "Vui lòng nhập email!");
+      return false;
+    } else {
+      context.openAlertBox("success", `Mã OTP đã được gửi vào địa chỉ email ${formFields.email}`);
+      
+      localStorage.setItem("userEmail", formFields.email);
+      localStorage.setItem("actionType", "forgot-password");
+
+      postData("/api/user/forgot-password", {
+            email: formFields.email,
+          }).then((res) => {
+            if(res?.error === false) {
+              context.openAlertBox("success", res?.message);
+              history("/verify");
+            } else {
+              context.openAlertBox("error", res?.message);
+            }
+          })
+    }
   };
 
   const onChangeInput = (e) => {

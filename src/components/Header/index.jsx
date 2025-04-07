@@ -52,9 +52,9 @@ function Header() {
     setAnchorElAccountMenu(null);
 
     fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem('accessToken')}`, { withCredentials: true }).then((res) => {
-      console.log(res);
       if(res?.error === false) {
         context.setIsLogin(false);
+        
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
       }

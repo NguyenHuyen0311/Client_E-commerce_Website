@@ -1,11 +1,77 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { myContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
+import { postData } from "../../utils/api";
 
 function ForgotPassword() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [isShowPassword, setIsShowPassword] = useState(true);
   const [isShowPassword2, setIsShowPassword2] = useState(true);
+
+  const [formFields, setFormFields] = useState({
+    email: localStorage.getItem("userEmail"),
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const context = useContext(myContext);
+  const history = useNavigate();
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setFormFields(() => {
+      return {
+        ...formFields,
+        [name]: value,
+      };
+    });
+  };
+
+  const validateValue = Object.values(formFields).every((el) => el);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setIsLoading(true);
+
+    if (formFields.newPassword === "") {
+      context.openAlertBox("error", "Vui lòng nhập mật khẩu mới!");
+      setIsLoading(false);
+      return false;
+    }
+
+    if (formFields.confirmPassword === "") {
+      context.openAlertBox("error", "Vui lòng nhập xác nhận mật khẩu mới!");
+      setIsLoading(false);
+      return false;
+    }
+
+    if (formFields.newPassword !== formFields.confirmPassword) {
+      context.openAlertBox("error", "Mật khẩu không trùng khớp!");
+      setIsLoading(false);
+      return false;
+    }
+
+    postData(`/api/user/reset-password`, formFields).then((res) => {
+      if(res?.error === false) {
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("actionType");
+
+        context.openAlertBox("success", res?.message);
+
+        setIsLoading(false);
+        history("/login");
+      } else {
+        context.openAlertBox("error", res?.message);
+      }
+      
+    })
+  };
 
   return (
     <section className="section py-10">
@@ -15,12 +81,14 @@ function ForgotPassword() {
             Đổi Mật Khẩu
           </h3>
 
-          <form className="w-full mt-5">
+          <form className="w-full mt-5" onSubmit={handleSubmit}>
             <div className="form-group w-full mb-4 relative">
               <TextField
                 className="w-full"
-                name="password"
-                id="password"
+                name="newPassword"
+                id="newPassword"
+                value={formFields.newPassword}
+                disabled={isLoading === true ? true : false}
                 type={isShowPassword ? "password" : "text"}
                 label="Mật khẩu mới"
                 variant="outlined"
@@ -28,7 +96,7 @@ function ForgotPassword() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
-                required
+                onChange={onChangeInput}
               />
 
               <Button
@@ -50,8 +118,10 @@ function ForgotPassword() {
             <div className="relative form-group w-full mb-3">
               <TextField
                 className="w-full"
-                name="confirm_password"
-                id="confirm_password"
+                name="confirmPassword"
+                id="confirmPassword"
+                value={formFields.confirmPassword}
+                disabled={isLoading === true ? true : false}
                 type={isShowPassword2 ? "password" : "text"}
                 label="Xác nhận mật khẩu"
                 variant="outlined"
@@ -59,7 +129,7 @@ function ForgotPassword() {
                 InputLabelProps={{
                   style: { fontSize: "14px" },
                 }}
-                required
+                onChange={onChangeInput}
               />
 
               <Button
@@ -79,7 +149,17 @@ function ForgotPassword() {
             </div>
 
             <div className="flex items-center mt-4 mb-3">
-              <Button className="btn-org w-full">Xác nhận thay đổi</Button>
+              <Button
+                type="submit"
+                disabled={!validateValue}
+                className="btn-org w-full flex gap-3"
+              >
+                {isLoading === true ? (
+                  <CircularProgress color="inherit" />
+                ) : (
+                  "Xác nhận thay đổi"
+                )}
+              </Button>
             </div>
           </form>
         </div>
