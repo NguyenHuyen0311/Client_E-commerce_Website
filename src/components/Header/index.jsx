@@ -155,9 +155,20 @@ function Header() {
                     onClick={handleClickMyAccout}
                     className="my-account-wrap !text-[#000] cursor-pointer flex items-center gap-3"
                   >
-                    <Button className="!rounded-full !bg-[#f1f1f1] !min-w-[40px] !h-[40px] !w-[40px]">
+                    {/* <Button className="!rounded-full !bg-[#f1f1f1] !min-w-[40px] !h-[40px] !w-[40px]">
                       <FaRegUser className="text-[16px] text-black/70" />
-                    </Button>
+                    </Button> */}
+                    <div className="!rounded-full overflow-hidden cursor-pointer !w-[40px] !h-[40px] !min-w-[40px]">
+                      <img
+                        src={context?.userData?.avatar}
+                        className="w-full h-full object-cover"
+                        style={{
+                          imageRendering: 'auto',
+                          backfaceVisibility: 'hidden',
+                          transform: 'translate3d(0,0,0)',
+                        }}
+                      />
+                    </div>
 
                     <div className="info flex flex-col">
                       <h4 className="text-[13px] leading-4 text-black/70 font-[500] normal-case text-left justify-start">

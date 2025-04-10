@@ -68,6 +68,11 @@ function AccountSidebar() {
         let avatar = [];
         avatar.push(res?.data?.avatar);
         setPreviews(avatar);
+
+        context.setUserData((prev) => ({
+          ...prev,
+          avatar: avatar,
+        }));
       });
     } catch (error) {
       console.log(error);
