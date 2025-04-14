@@ -20,7 +20,7 @@ function ProductZoom(props) {
   return (
     <>
       <div className="flex gap-3">
-        <div className="slider w-[15%]">
+        <div className="slider w-[15%] overflow-hidden">
           <Swiper
             onSwiper={setSwiperSmall}
             direction={"vertical"}
@@ -28,7 +28,7 @@ function ProductZoom(props) {
             spaceBetween={10}
             navigation={true}
             modules={[Navigation]}
-            className="zoom-product-slider home-category-slider-container max-h-[400px] overflow-hidden"
+            className="zoom-product-slider home-category-slider-container max-h-[400px] h-[400px] w-full overflow-hidden"
           >
             {props?.images?.map((item, index) => {
               return (
@@ -47,17 +47,18 @@ function ProductZoom(props) {
           </Swiper>
         </div>
 
-        <div className="zoom-wrap w-[85%]">
+        <div className="zoom-wrap w-[85%] overflow-hidden">
           <Swiper
             onSwiper={setSwiperBig}
             slidesPerView={1}
             spaceBetween={0}
             navigation={false}
+            className="overflow-hidden"
           >
             {props?.images?.map((item, index) => (
-              <SwiperSlide key={index}>
+              <SwiperSlide className="overflow-hidden" key={index}>
                 <InnerImageZoom
-                  className="rounded-lg w-full max-h-[400px] overflow-hidden object-cover"
+                  className="rounded-lg w-full h-[400px] max-h-[400px] overflow-hidden object-cover"
                   src={item}
                   zoomType="hover"
                   zoomScale={1}

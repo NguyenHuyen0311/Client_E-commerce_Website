@@ -10,8 +10,8 @@ function ProductDetailsContent(props) {
   const [selectedWeightIndex, setSelectedWeightIndex] = useState(null);
 
   return (
-    <div className="product-content-inner w-full">
-      <h2 className="text-[20px] font-semibold">{props?.item?.name}</h2>
+    <div className="product-content-inner w-full overflow-x-hidden break-words">
+      <h2 className="text-[20px] font-semibold whitespace-normal">{props?.item?.name}</h2>
 
       <div className="flex items-center gap-3 text-gray-500 mt-2">
         <span className="text-[13px]">

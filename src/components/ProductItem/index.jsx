@@ -47,7 +47,7 @@ function ProductItem(props) {
         <h6 className="text-[14px] text-[#3b3a3a] product-brand">
           <span className="link transition-all">{props?.item?.brand}</span>
         </h6>
-        <h3 className="text-[16px] product-title mt-2 font-[500] mb-2 text-[rgb(0, 0, 0, 0.9)]">
+        <h3 className="text-[16px] product-title mt-2 font-[500] mb-2 text-[rgb(0, 0, 0, 0.9)] truncate">
           <Link
             to={`/product-details/${props?.item?._id}`}
             className="link transition-all"

@@ -68,7 +68,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-white">
+    <header className="bg-white sticky -top-[50px] z-[999]">
       <div className="top-strip py-2 border-t-[1px] border-gray-200 border-b-[1px]">
         <div className="container">
           <div className="flex items-center justify-between">
@@ -119,7 +119,7 @@ function Header() {
         </div>
       </div>
 
-      <div className="header py-3 border-b-[1px] border-gray-200">
+      <div className="header border-b-[1px] pt-2 border-gray-200">
         <div className="container flex items-center justify-between">
           <div className="col1 w-[25%]">
             <Link to="/" className="logo">

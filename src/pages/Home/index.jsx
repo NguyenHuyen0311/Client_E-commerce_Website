@@ -16,9 +16,9 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import BlogItem from "../../components/BlogItem";
 import HomeProductSaleBanner from "../../components/HomeProductSaleBanner";
-import HomeProductSaleBannerMini from "../../components/HomeProductSaleBannerMini";
 import { fetchDataFromApi } from "../../utils/api";
 import { myContext } from "../../App";
+import ProductLoading from "../../components/ProductLoading";
 
 function Home() {
   const [value, setValue] = useState(0);
@@ -56,6 +56,8 @@ function Home() {
   };
 
   const filterByCatId = (id) => {
+    setProductsData([]);
+
     fetchDataFromApi(`/api/product/getAllProductsByCatId/${id}`).then((res) => {
       if (res?.error === false) {
         setProductsData(res?.products);
@@ -112,6 +114,10 @@ function Home() {
             </div>
           </div>
 
+          {
+            productsData?.length === 0 && <ProductLoading />
+          }
+
           {productsData?.length !== 0 && (
             <ProductsSlider item={5} data={productsData} />
           )}
@@ -119,14 +125,8 @@ function Home() {
       </section>
 
       <section className="bg-white pb-10">
-        <div className="container flex gap-5">
-          <div className="part-1 w-[70%]">
+        <div className="container w-full">
             <HomeProductSaleBanner />
-          </div>
-
-          <div className="part-2 w-[30%]">
-            <HomeProductSaleBannerMini />
-          </div>
         </div>
       </section>
 
@@ -157,6 +157,11 @@ function Home() {
             </div>
             <div className="right-section w-[25%]"></div>
           </div>
+
+          {
+            allProductsData?.length === 0 && <ProductLoading />
+          }
+
           {allProductsData?.length !== 0 && (
             <ProductsSlider
               data={[...allProductsData].sort(
@@ -178,6 +183,10 @@ function Home() {
             </div>
             <div className="right-section w-[25%]"></div>
           </div>
+
+          {
+            featuredProductsData?.length === 0 && <ProductLoading />
+          }
 
           {featuredProductsData?.length !== 0 && (
             <ProductsSlider item={5} data={featuredProductsData} />

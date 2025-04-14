@@ -164,7 +164,7 @@ function App() {
 
             {openProductDetailsModal?.item?.length !== 0 && (
               <>
-                <div className="col-1 w-[40%] px-3 py-8">
+                <div className="col-1 w-[40%] mx-3 my-8">
                   <ProductZoom images={openProductDetailsModal?.item?.images} />
                 </div>
 
