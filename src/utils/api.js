@@ -50,7 +50,7 @@ export const uploadImage = async (url, updateData) => {
   }
 
   var response;
-  await axios.put(apiUrl + url, updateData, params).then((res) => {
+  await axios.post(apiUrl + url, updateData, params).then((res) => {
     // console.log(res);
     response = res;
   });

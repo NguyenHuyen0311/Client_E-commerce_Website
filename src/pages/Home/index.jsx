@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import HomeSlider from "../../components/HomeSlider";
 import HomeCategorySlider from "../../components/HomeCategorySlider";
 import { LiaShippingFastSolid } from "react-icons/lia";
@@ -17,18 +17,59 @@ import { Navigation } from "swiper/modules";
 import BlogItem from "../../components/BlogItem";
 import HomeProductSaleBanner from "../../components/HomeProductSaleBanner";
 import HomeProductSaleBannerMini from "../../components/HomeProductSaleBannerMini";
+import { fetchDataFromApi } from "../../utils/api";
+import { myContext } from "../../App";
 
 function Home() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [homeSlidesData, setHomeSlidesData] = useState([]);
+  const [productsData, setProductsData] = useState([]);
+  const [allProductsData, setAllProductsData] = useState([]);
+  const [featuredProductsData, setFeaturedProductsData] = useState([]);
+
+  const context = useContext(myContext);
+
+  useEffect(() => {
+    fetchDataFromApi("/api/homeSlider").then((res) => {
+      setHomeSlidesData(res?.data);
+    });
+    fetchDataFromApi("/api/product/getAllProducts").then((res) => {
+      setAllProductsData(res?.products);
+    });
+    fetchDataFromApi("/api/product/getAllFeaturedProducts").then((res) => {
+      setFeaturedProductsData(res?.products);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchDataFromApi(
+      `/api/product/getAllProductsByCatId/${context?.catData[0]?._id}`
+    ).then((res) => {
+      if (res?.error === false) {
+        setProductsData(res?.products);
+      }
+    });
+  }, [context?.catData]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const filterByCatId = (id) => {
+    fetchDataFromApi(`/api/product/getAllProductsByCatId/${id}`).then((res) => {
+      if (res?.error === false) {
+        setProductsData(res?.products);
+      }
+    });
+  };
+
   return (
     <div>
-      <HomeSlider />
-      <HomeCategorySlider />
+      {homeSlidesData?.length !== 0 && <HomeSlider data={homeSlidesData} />}
+
+      {context?.catData?.length !== 0 && (
+        <HomeCategorySlider data={context?.catData} />
+      )}
 
       <section className="bg-white py-8">
         <div className="container">
@@ -55,18 +96,25 @@ function Home() {
                   scrollButtons="auto"
                   aria-label="scrollable auto tabs example"
                 >
-                  <Tab label="Đồ ăn nhẹ" className="!capitalize" />
-                  <Tab label="Đồ ăn vặt khô" className="!capitalize" />
-                  <Tab label="Bộ trà sữa" className="!capitalize" />
-                  <Tab label="Chè & Món tráng miệng" className="!capitalize" />
-                  <Tab label="Trà" className="!capitalize" />
-                  <Tab label="Ăn vặt khỏe mạnh" className="!capitalize" />
+                  {context?.catData?.length !== 0 &&
+                    context?.catData?.map((cat, index) => {
+                      return (
+                        <Tab
+                          key={index}
+                          onClick={() => filterByCatId(cat?._id)}
+                          label={cat?.name}
+                          className="!capitalize"
+                        />
+                      );
+                    })}
                 </Tabs>
               </Box>
             </div>
           </div>
 
-          <ProductsSlider item={5} />
+          {productsData?.length !== 0 && (
+            <ProductsSlider item={5} data={productsData} />
+          )}
         </div>
       </section>
 
@@ -109,8 +157,14 @@ function Home() {
             </div>
             <div className="right-section w-[25%]"></div>
           </div>
-
-          <ProductsSlider item={5} />
+          {allProductsData?.length !== 0 && (
+            <ProductsSlider
+              data={[...allProductsData].sort(
+                (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+              )}
+              item={5}
+            />
+          )}
         </div>
       </section>
 
@@ -119,13 +173,15 @@ function Home() {
           <div className="flex items-center justify-between">
             <div className="left-section w-[75%]">
               <h2 className="text-[20px] font-[700] text-[#3b3a3a]">
-                Sản phẩm phổ biến
+                Sản phẩm nổi bật
               </h2>
             </div>
             <div className="right-section w-[25%]"></div>
           </div>
 
-          <ProductsSlider item={5} />
+          {featuredProductsData?.length !== 0 && (
+            <ProductsSlider item={5} data={featuredProductsData} />
+          )}
         </div>
       </section>
 

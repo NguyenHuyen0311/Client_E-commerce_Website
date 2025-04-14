@@ -52,17 +52,20 @@ function Header() {
   const logout = () => {
     setAnchorElAccountMenu(null);
 
-    fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem('accessToken')}`, { withCredentials: true }).then((res) => {
-      if(res?.error === false) {
+    fetchDataFromApi(
+      `/api/user/logout?token=${localStorage.getItem("accessToken")}`,
+      { withCredentials: true }
+    ).then((res) => {
+      if (res?.error === false) {
         context.setIsLogin(false);
-        
+
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        
+
         history("/");
       }
     });
-  }
+  };
 
   return (
     <header className="bg-white">
@@ -155,20 +158,23 @@ function Header() {
                     onClick={handleClickMyAccout}
                     className="my-account-wrap !text-[#000] cursor-pointer flex items-center gap-3"
                   >
-                    {/* <Button className="!rounded-full !bg-[#f1f1f1] !min-w-[40px] !h-[40px] !w-[40px]">
-                      <FaRegUser className="text-[16px] text-black/70" />
-                    </Button> */}
-                    <div className="!rounded-full overflow-hidden cursor-pointer !w-[40px] !h-[40px] !min-w-[40px]">
-                      <img
-                        src={context?.userData?.avatar}
-                        className="w-full h-full object-cover"
-                        style={{
-                          imageRendering: 'auto',
-                          backfaceVisibility: 'hidden',
-                          transform: 'translate3d(0,0,0)',
-                        }}
-                      />
-                    </div>
+                    {context?.userData?.avatar ? (
+                      <div className="!rounded-full overflow-hidden cursor-pointer !w-[40px] !h-[40px] !min-w-[40px]">
+                        <img
+                          src={context?.userData?.avatar}
+                          className="w-full h-full object-cover"
+                          style={{
+                            imageRendering: "auto",
+                            backfaceVisibility: "hidden",
+                            transform: "translate3d(0,0,0)",
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <Button className="!rounded-full !bg-[#f1f1f1] !min-w-[40px] !h-[40px] !w-[40px]">
+                        <FaRegUser className="text-[16px] text-black/70" />
+                      </Button>
+                    )}
 
                     <div className="info flex flex-col">
                       <h4 className="text-[13px] leading-4 text-black/70 font-[500] normal-case text-left justify-start">

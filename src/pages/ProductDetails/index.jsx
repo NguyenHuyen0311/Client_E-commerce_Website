@@ -65,9 +65,9 @@ function ProductDetails() {
                 <div className="scrool w-full max-h-[300px] overflow-y-scroll overflow-x-hidden">
                   <div className="review pb-5 border-b w-full flex items-center justify-between mt-6">
                     <div className="info w-[60%] flex items-center gap-3">
-                      <div className="img w-[60px] h-[60px] overflow-hidden rounded-full">
+                      <div className="img w-[60px] !min-w-[60px] h-[60px] overflow-hidden rounded-full">
                         <img
-                          className="w-full"
+                          className="w-full h-full"
                           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm4Cp0JO-s03hFKGZ2WgyO4luH1JSSzcB0ZA&s"
                         />
                       </div>

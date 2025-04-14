@@ -31,15 +31,29 @@ import { fetchDataFromApi } from "./utils/api";
 const myContext = createContext();
 
 function App() {
-  const [openProductDetailsModal, setOpenProductDetailsModal] = useState(false);
+  const [openProductDetailsModal, setOpenProductDetailsModal] = useState({
+    open: false,
+    item: {}
+  });
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("lg");
   const [openCartPanel, setOpenCartPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
-  
+  const [catData, setCatData] = useState([]);
+
+  const handleopenProductDetailsModal = (status, item) => {
+    setOpenProductDetailsModal({
+      open: status,
+      item: item
+    });
+  };
+
   const handleCloseProductDetailsModal = () => {
-    setOpenProductDetailsModal(false);
+    setOpenProductDetailsModal({
+      open: false,
+      item: {}
+    });
   };
 
   const toggleDrawerCartPanel = (newOpen) => () => {
@@ -59,6 +73,14 @@ function App() {
     }
   }, [isLogin])
 
+  useEffect(() => {
+      fetchDataFromApi("/api/category").then((res) => {
+        if (res?.error === false) {
+          setCatData(res?.data);
+        }
+      });
+    }, []);
+
   const openAlertBox = (status, message) => {
     if(status === "success") {
       toast.success(message);
@@ -71,6 +93,7 @@ function App() {
 
   const values = {
     setOpenProductDetailsModal,
+    handleopenProductDetailsModal,
     setOpenCartPanel,
     toggleDrawerCartPanel,
     openCartPanel,
@@ -79,6 +102,8 @@ function App() {
     setIsLogin,
     userData,
     setUserData,
+    catData,
+    setCatData,
   };
 
   return (
@@ -102,7 +127,11 @@ function App() {
             <Route path="/register" exact={true} element={<Register />} />
             <Route path="/cart" exact={true} element={<Cart />} />
             <Route path="/verify" exact={true} element={<Verify />} />
-            <Route path="/forgot-password" exact={true} element={<ForgotPassword />} />
+            <Route
+              path="/forgot-password"
+              exact={true}
+              element={<ForgotPassword />}
+            />
             <Route path="/checkout" exact={true} element={<Checkout />} />
             <Route path="/my-account" exact={true} element={<MyAccount />} />
             <Route path="/my-wishlist" exact={true} element={<MyWishlist />} />
@@ -116,7 +145,7 @@ function App() {
       <Toaster />
 
       <Dialog
-        open={openProductDetailsModal}
+        open={openProductDetailsModal.open}
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         onClose={handleCloseProductDetailsModal}
@@ -133,13 +162,17 @@ function App() {
               <IoMdClose className="text-[20px]" />
             </Button>
 
-            <div className="col-1 w-[40%] px-3 py-8">
-              <ProductZoom />
-            </div>
+            {openProductDetailsModal?.item?.length !== 0 && (
+              <>
+                <div className="col-1 w-[40%] px-3 py-8">
+                  <ProductZoom images={openProductDetailsModal?.item?.images} />
+                </div>
 
-            <div className="col-2 w-[60%] px-7 py-8 product-content-container">
-              <ProductDetailsContent />
-            </div>
+                <div className="col-2 w-[60%] px-7 py-8 product-content-container">
+                  <ProductDetailsContent item={openProductDetailsModal?.item} />
+                </div>
+              </>
+            )}
           </div>
         </DialogContent>
       </Dialog>
