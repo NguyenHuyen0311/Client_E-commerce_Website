@@ -49,6 +49,9 @@ function MyAccount() {
 
       setChangePassword({
         email: context?.userData?.email,
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
       });
     }
   }, [context?.userData]);
@@ -62,9 +65,9 @@ function MyAccount() {
       };
     });
 
-    setChangePassword(() => {
+    setChangePassword((prev) => {
       return {
-        ...formFields,
+        ...prev,
         [name]: value,
       };
     });
@@ -112,6 +115,12 @@ function MyAccount() {
 
     setIsLoading2(true);
 
+    if (!context?.userData?.signUpWithGoogle && changePassword.oldPassword === "") {
+      context.openAlertBox("error", "Vui lòng nhập mật khẩu cũ!");
+      setIsLoading2(false);
+      return false;
+    }    
+
     if (changePassword.newPassword === "") {
       context.openAlertBox("error", "Vui lòng nhập mật khẩu mới!");
       return false;
@@ -136,6 +145,11 @@ function MyAccount() {
       if (res?.error !== true) {
         setIsLoading2(false);
         context.openAlertBox("success", res?.message);
+        setChangePassword({
+          oldPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        })
       } else {
         context.openAlertBox("error", res?.message);
         setIsLoading2(false);
@@ -154,7 +168,13 @@ function MyAccount() {
           <div className="card bg-white p-5 shadow-md rounded-md">
             <div className="flex items-center justify-between border-b !pb-2">
               <h2 className="text-[15px] font-[600]">Trang cá nhân</h2>
-              <Button onClick={() => setIsChangePasswordFormShow(!isChangePasswordFormShow)}>Đổi Mật Khẩu</Button>
+              <Button
+                onClick={() =>
+                  setIsChangePasswordFormShow(!isChangePasswordFormShow)
+                }
+              >
+                Đổi Mật Khẩu
+              </Button>
             </div>
 
             <form className="mt-5" onSubmit={handleSubmit}>
@@ -236,6 +256,27 @@ function MyAccount() {
               <form className="mt-5" onSubmit={handleSubmit2}>
                 <div className="flex items-center gap-5">
                   <div className="w-[50%]">
+                    {context?.userData?.signUpWithGoogle === false && (
+                      <TextField
+                        id="outlined-basic"
+                        label="Mật khẩu cũ"
+                        type="text"
+                        variant="outlined"
+                        name="oldPassword"
+                        value={changePassword.oldPassword}
+                        disabled={isLoading2 === true ? true : false}
+                        size="small"
+                        fullWidth
+                        InputLabelProps={{
+                          style: { fontSize: "14px" },
+                        }}
+                        onChange={onChangeInput}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="flex w-full items-center mt-5 gap-5">
+                <div className="w-[53%]">
                     <TextField
                       id="outlined-basic"
                       label="Mật khẩu mới"
@@ -274,7 +315,6 @@ function MyAccount() {
                 <div className="flex items-center mt-5">
                   <Button
                     type="submit"
-                    disabled={!validateValue2}
                     className="btn-org !px-5"
                   >
                     {isLoading2 === true ? (

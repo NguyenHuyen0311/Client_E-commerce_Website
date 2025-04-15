@@ -9,6 +9,11 @@ import { myContext } from "../../App";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { firebaseApp } from "../../../firebase";
+const auth = getAuth(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
 function Register() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,17 +60,16 @@ function Register() {
     }
 
     postData("/api/user/register", formFields).then((res) => {
-      if(res?.error !== true) {
+      if (res?.error !== true) {
         setIsLoading(false);
         context.openAlertBox("success", res?.message);
         localStorage.setItem("userEmail", formFields.email);
-        
+
         setFormFields({
           name: "",
           email: "",
           password: "",
         });
-
 
         history("/verify");
       } else {
@@ -73,6 +77,52 @@ function Register() {
         setIsLoading(false);
       }
     });
+  };
+
+  const authWithGoogle = () => {
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        
+        const fields = {
+          name: user.providerData[0].displayName,
+          email: user.providerData[0].email,
+          password: null,
+          avatar: user.providerData[0].photoURL,
+          phone: user.providerData[0].phoneNumber,
+          role: "USER"
+        }
+        
+        postData("/api/user/authWithGoogle", fields).then((res) => {
+          if (res?.error !== true) {
+            setIsLoading(false);
+            context.openAlertBox("success", res?.message);
+            localStorage.setItem("userEmail", fields.email);
+            localStorage.setItem("accessToken", res?.data?.accessToken);
+            localStorage.setItem("refreshToken", res?.data?.refreshToken);
+    
+            context.setIsLogin(true);
+            history("/");
+          } else {
+            context.openAlertBox("error", res?.message);
+            setIsLoading(false);
+          }
+        });
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   };
 
   return (
@@ -90,7 +140,7 @@ function Register() {
                 id="name"
                 name="name"
                 value={formFields.name}
-                disabled={isLoading===true ? true : false}
+                disabled={isLoading === true ? true : false}
                 type="text"
                 label="Họ và Tên"
                 variant="outlined"
@@ -108,7 +158,7 @@ function Register() {
                 id="email"
                 name="email"
                 value={formFields.email}
-                disabled={isLoading===true ? true : false}
+                disabled={isLoading === true ? true : false}
                 type="email"
                 label="Email"
                 variant="outlined"
@@ -126,7 +176,7 @@ function Register() {
                 id="password"
                 name="password"
                 value={formFields.password}
-                disabled={isLoading===true ? true : false}
+                disabled={isLoading === true ? true : false}
                 type={isShowPassword ? "password" : "text"}
                 label="Mật khẩu"
                 variant="outlined"
@@ -183,9 +233,12 @@ function Register() {
               <div className="flex-1 h-[1px] bg-gray-300"></div>
             </div>
 
-            <Button className="gap-2 !mb-4 w-full !text-black/80 !font-[500] !bg-[#f1f1f1] flex items-center justify-center">
+            <Button
+              onClick={authWithGoogle}
+              className="gap-2 !mb-4 w-full !text-black/80 !font-[500] !bg-[#f1f1f1] flex items-center justify-center"
+            >
               <FcGoogle className="text-[20px]" />
-              Đăng nhập với Google
+              Đăng ký với Google
             </Button>
           </form>
         </div>

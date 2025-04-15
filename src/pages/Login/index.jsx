@@ -8,6 +8,11 @@ import { myContext } from "../../App";
 import CircularProgress from "@mui/material/CircularProgress";
 import { postData } from "../../utils/api";
 
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { firebaseApp } from "../../../firebase";
+const auth = getAuth(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,25 +26,28 @@ function Login() {
   const history = useNavigate();
 
   const forgotPassword = () => {
-    if(formFields.email === "") {
+    if (formFields.email === "") {
       context.openAlertBox("error", "Vui lòng nhập email!");
       return false;
     } else {
-      context.openAlertBox("success", `Mã OTP đã được gửi vào địa chỉ email ${formFields.email}`);
-      
+      context.openAlertBox(
+        "success",
+        `Mã OTP đã được gửi vào địa chỉ email ${formFields.email}`
+      );
+
       localStorage.setItem("userEmail", formFields.email);
       localStorage.setItem("actionType", "forgot-password");
 
       postData("/api/user/forgot-password", {
-            email: formFields.email,
-          }).then((res) => {
-            if(res?.error === false) {
-              context.openAlertBox("success", res?.message);
-              history("/verify");
-            } else {
-              context.openAlertBox("error", res?.message);
-            }
-          })
+        email: formFields.email,
+      }).then((res) => {
+        if (res?.error === false) {
+          context.openAlertBox("success", res?.message);
+          history("/verify");
+        } else {
+          context.openAlertBox("error", res?.message);
+        }
+      });
     }
   };
 
@@ -93,6 +101,52 @@ function Login() {
     });
   };
 
+  const authWithGoogle = () => {
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+
+        const fields = {
+          name: user.providerData[0].displayName,
+          email: user.providerData[0].email,
+          password: null,
+          avatar: user.providerData[0].photoURL,
+          phone: user.providerData[0].phoneNumber,
+          role: "USER",
+        };
+
+        postData("/api/user/authWithGoogle", fields).then((res) => {
+          if (res?.error !== true) {
+            setIsLoading(false);
+            context.openAlertBox("success", res?.message);
+            localStorage.setItem("userEmail", fields.email);
+            localStorage.setItem("accessToken", res?.data?.accessToken);
+            localStorage.setItem("refreshToken", res?.data?.refreshToken);
+
+            context.setIsLogin(true);
+            history("/");
+          } else {
+            context.openAlertBox("error", res?.message);
+            setIsLoading(false);
+          }
+        });
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
+
   return (
     <section className="section py-10">
       <div className="container">
@@ -108,7 +162,7 @@ function Login() {
                 id="email"
                 name="email"
                 value={formFields.email}
-                disabled={isLoading===true ? true : false}
+                disabled={isLoading === true ? true : false}
                 type="email"
                 label="Email"
                 variant="outlined"
@@ -125,7 +179,7 @@ function Login() {
                 className="w-full"
                 name="password"
                 value={formFields.password}
-                disabled={isLoading===true ? true : false}
+                disabled={isLoading === true ? true : false}
                 id="password"
                 type={isShowPassword ? "password" : "text"}
                 label="Mật khẩu"
@@ -180,7 +234,7 @@ function Login() {
               <div className="flex-1 h-[1px] bg-gray-300"></div>
             </div>
 
-            <Button className="gap-2 !mb-4 w-full !text-black/80 !font-[500] !bg-[#f1f1f1] flex items-center justify-center">
+            <Button onClick={authWithGoogle} className="gap-2 !mb-4 w-full !text-black/80 !font-[500] !bg-[#f1f1f1] flex items-center justify-center">
               <FcGoogle className="text-[20px]" />
               Đăng nhập với Google
             </Button>
