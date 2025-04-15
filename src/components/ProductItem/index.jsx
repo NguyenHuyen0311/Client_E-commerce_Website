@@ -6,18 +6,19 @@ import { Button } from "@mui/material";
 import { FaRegHeart } from "react-icons/fa";
 import { MdZoomOutMap } from "react-icons/md";
 import { myContext } from "../../App";
+import { IoCartOutline } from "react-icons/io5";
 
 function ProductItem(props) {
   const context = useContext(myContext);
 
   return (
-    <div className="product-item rounded-md overflow-hidden border-1 border-solid border-[#ddd] transition-all shadow-lg">
+    <div className="product-item bg-white rounded-md overflow-hidden border-1 border-solid border-[#ddd] transition-all shadow-lg">
       <div className="group img-wrapper w-[100%] rounded-t-md overflow-hidden relative">
         <Link to={`/product-details/${props?.item?._id}`}>
           <div className="product-img h-[220px] overflow-hidden">
             <img
               src={props?.item?.images[0]}
-              className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
+              className="w-full h-full bg-white object-cover group-hover:scale-105 transition-all duration-300"
             />
             {props?.item?.images?.length > 1 && (
               <img
@@ -32,7 +33,9 @@ function ProductItem(props) {
         </div>
         <div className="actions absolute top-[-200px] right-[15px] flex items-center gap-2 flex-col w-[30px] transition-all duration-500 group-hover:top-[10px] opacity-0 group-hover:opacity-100">
           <Button
-            onClick={() => context.handleopenProductDetailsModal(true, props?.item)}
+            onClick={() =>
+              context.handleopenProductDetailsModal(true, props?.item)
+            }
             className="!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center"
           >
             <MdZoomOutMap className="text-[18px]" />
@@ -69,6 +72,11 @@ function ProductItem(props) {
             {props?.item?.price?.toLocaleString("vi-VN")}đ
           </span>
         </div>
+
+        <Button className="btn-border flex items-center gap-2 w-full !mt-3">
+          <IoCartOutline className="!text-[20px]" />
+          <h2>Thêm vào giỏ</h2>
+        </Button>
       </div>
     </div>
   );

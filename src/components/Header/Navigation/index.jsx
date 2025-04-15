@@ -108,7 +108,7 @@ function Navigation() {
                     key={index}
                     className={`list-none flex items-center px-2 relative w-[33.33333%] flex-col ${isLast ? "" : "border-r"}`}
                   >
-                    <Link to="/product-list" className="w-full">
+                    <Link to={`/product-list?catId=${cat?._id}`} className="w-full">
                       <Button className="w-full !normal-case !text-left !justify-start !px-3 !text-black/80">
                         {cat?.name}
                       </Button>
@@ -133,7 +133,7 @@ function Navigation() {
                           cat?.children?.map((subCat, index_) => {
                             return (
                               <li key={index_} className="list-none relative">
-                                <Link to="/product-list" className="w-full">
+                                <Link to={`/product-list?subCatId=${subCat?._id}`} className="w-full">
                                   <Button className="w-full !normal-case !text-left !justify-start !px-3 !text-black/80">
                                     {subCat?.name}
                                   </Button>
@@ -163,7 +163,7 @@ function Navigation() {
                                               className="list-none relative"
                                             >
                                               <Link
-                                                to="/product-list"
+                                                to={`/product-list?thirdSubCatId=${thirdLevelCat?._id}`}
                                                 className="w-full"
                                               >
                                                 <Button className="w-full !normal-case !text-left !justify-start !px-3 !text-black/80">
