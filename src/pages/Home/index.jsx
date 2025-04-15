@@ -26,6 +26,7 @@ function Home() {
   const [productsData, setProductsData] = useState([]);
   const [allProductsData, setAllProductsData] = useState([]);
   const [featuredProductsData, setFeaturedProductsData] = useState([]);
+  const [blogData, setBlogData] = useState([]);
 
   const context = useContext(myContext);
 
@@ -38,6 +39,9 @@ function Home() {
     });
     fetchDataFromApi("/api/product/getAllFeaturedProducts").then((res) => {
       setFeaturedProductsData(res?.products);
+    });
+    fetchDataFromApi("/api/blog").then((res) => {
+      setBlogData(res?.blogs);
     });
   }, []);
 
@@ -194,33 +198,33 @@ function Home() {
         </div>
       </section>
 
-      <section className="blog-section pb-5  pt-0 bg-white">
-        <div className="container">
-          <h2 className="pb-6 text-[20px] font-[700] text-[#3b3a3a]">
-            Bài viết mới nhất
-          </h2>
-          <Swiper
-            className="blog-slider"
-            slidesPerView={4}
-            spaceBetween={20}
-            navigation={true}
-            modules={[Navigation]}
-          >
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-            <SwiperSlide>
-              <BlogItem />
-            </SwiperSlide>
-          </Swiper>
-        </div>
-      </section>
+      {
+        blogData?.length !== 0 && 
+        <section className="blog-section pb-5  pt-0 bg-white">
+          <div className="container">
+            <h2 className="pb-6 text-[20px] font-[700] text-[#3b3a3a]">
+              Bài viết mới nhất
+            </h2>
+            <Swiper
+              className="blog-slider"
+              slidesPerView={4}
+              spaceBetween={20}
+              navigation={true}
+              modules={[Navigation]}
+            >
+              {
+                blogData?.map((item, index) => {
+                  return (
+                    <SwiperSlide key={index}>
+                      <BlogItem item={item} />
+                    </SwiperSlide>
+                  )
+                })
+              }
+            </Swiper>
+          </div>
+        </section>
+      }
     </div>
   );
 }
