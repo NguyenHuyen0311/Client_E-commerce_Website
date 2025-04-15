@@ -18,6 +18,9 @@ function ProductDetailsContent(props) {
           Thương hiệu:{" "}
           <span className="text-[12px] font-[600]">{props?.item?.brand}</span>
         </span>
+      </div>
+
+      <div className="flex items-center mt-1 gap-4">
         <span className="mt-1">
           <Rating
             name="size-small"
@@ -26,7 +29,7 @@ function ProductDetailsContent(props) {
             readOnly
           />
         </span>
-        <span className="text-[13px]">Reviews (5)</span>
+        <span onClick={props.gotoReviews} className="link cursor-pointer text-[13px]">Nhận xét ({props?.reviewsCount})</span>
       </div>
 
       <div className="mt-3 flex items-center gap-4">
@@ -38,7 +41,7 @@ function ProductDetailsContent(props) {
         </span>
         <span className="text-gray-500 text-[13px] font-medium">
           Số lượng:{" "}
-          <b className="text-green-600 text-[13px]">
+          <b className="text-green-600 text-[14px]">
             {props?.item?.countInStock}
           </b>
         </span>
@@ -54,7 +57,7 @@ function ProductDetailsContent(props) {
           <div className="flex items-center gap-2 actions">
             {props?.item?.productFlavor?.map((item, index) => {
               return (
-                <Button
+                <Button key={index}
                   className={`${
                     selectedFlavorIndex === index
                       ? "!bg-[#ff5252] !text-white"
@@ -80,6 +83,7 @@ function ProductDetailsContent(props) {
               ?.map((item, index) => {
                 return (
                   <Button
+                    key={index}
                     className={`${
                       selectedWeightIndex === index
                         ? "!bg-[#ff5252] !text-white"
