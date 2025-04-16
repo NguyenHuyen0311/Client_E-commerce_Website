@@ -40,7 +40,7 @@ function Header() {
 
   const [anchorElAccountMenu, setAnchorElAccountMenu] = useState(null);
   const openAccountMenu = Boolean(anchorElAccountMenu);
-
+  
   const handleClickMyAccout = (event) => {
     setAnchorElAccountMenu(event.currentTarget);
   };
@@ -61,6 +61,7 @@ function Header() {
 
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        context?.setUserData(null);
 
         history("/");
       }
@@ -296,7 +297,7 @@ function Header() {
                     aria-label="cart"
                     onClick={() => context.setOpenCartPanel(true)}
                   >
-                    <StyledBadge badgeContent={4} color="secondary">
+                    <StyledBadge badgeContent={context?.cartData?.length !== 0 ? context?.cartData?.length : 0} color="secondary">
                       <IoCartOutline />
                     </StyledBadge>
                   </IconButton>
@@ -317,7 +318,7 @@ function Header() {
         className="cart-panel"
       >
         <div className="flex items-center justify-between gap-3 py-3 px-4 border-b">
-          <h4 className="text-[16px] font-[500]">Giỏ hàng (0)</h4>
+          <h4 className="text-[16px] font-[500]">Giỏ hàng ({context?.cartData?.length})</h4>
 
           <IoMdClose
             className="text-[20px] cursor-pointer"
@@ -325,7 +326,11 @@ function Header() {
           />
         </div>
 
-        <CartPanel />
+        {
+          context?.cartData?.length !== 0 ? 
+        <CartPanel data={context?.cartData} /> : "Giỏ hàng trống"
+        }
+
       </Drawer>
     </header>
   );

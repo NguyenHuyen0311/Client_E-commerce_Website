@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
@@ -26,6 +26,10 @@ function Register() {
 
   const context = useContext(myContext);
   const history = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
@@ -87,16 +91,16 @@ function Register() {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        
+
         const fields = {
           name: user.providerData[0].displayName,
           email: user.providerData[0].email,
           password: null,
           avatar: user.providerData[0].photoURL,
           phone: user.providerData[0].phoneNumber,
-          role: "USER"
-        }
-        
+          role: "USER",
+        };
+
         postData("/api/user/authWithGoogle", fields).then((res) => {
           if (res?.error !== true) {
             setIsLoading(false);
@@ -104,7 +108,7 @@ function Register() {
             localStorage.setItem("userEmail", fields.email);
             localStorage.setItem("accessToken", res?.data?.accessToken);
             localStorage.setItem("refreshToken", res?.data?.refreshToken);
-    
+
             context.setIsLogin(true);
             history("/");
           } else {

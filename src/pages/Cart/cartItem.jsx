@@ -7,14 +7,17 @@ import { GoTriangleDown } from "react-icons/go";
 import { Button, ButtonGroup, Rating, Typography } from "@mui/material";
 
 function CartItem(props) {
-    const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [flavorAnchorEl, setFlavorAnchorEl] = useState(null);
+  const [weightAnchorEl, setWeightAnchorEl] = useState(null);
   const [selectedFlavor, setSelectedFlavor] = useState(props.flavor);
+  const [selectedWeight, setSelectedWeight] = useState(props.weight);
 
   const handleIncrease = () => setQuantity((prev) => prev + 1);
   const handleDecrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   const openFlavor = Boolean(flavorAnchorEl);
+  const openWeight = Boolean(weightAnchorEl);
 
   const handleClickFlavor = (event) => {
     setFlavorAnchorEl(event.currentTarget);
@@ -26,106 +29,185 @@ function CartItem(props) {
       setSelectedFlavor(value);
     }
   };
-  
+
+  const handleClickWeight = (event) => {
+    setWeightAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseWeight = (value) => {
+    setWeightAnchorEl(null);
+    if (value && value !== selectedWeight) {
+      setSelectedWeight(value);
+    }
+  };
+
   return (
     <div className="viewcart-item pb-5 border-b relative w-full p-3 flex items-center gap-4">
       <IoMdClose className="cursor-pointer absolute top-[15px] link transition-all right-[15px] text-[22px]" />
 
       <div className="img w-[15%] rounded-md overflow-hidden">
-        <Link to="/product/333" className="group">
+        <Link
+          to={`/product-details/${props?.item?.productId}`}
+          className="group"
+        >
           <img
-            src="https://serviceapi.spicezgold.com/download/1742462909156_gdgd1.jpg"
+            src={props?.item?.image}
             className="w-full group-hover:scale-105 transition-all"
           />
         </Link>
       </div>
 
       <div className="info w-[85%]">
-        <span className="text-[12px] text-black/70 font-[400]">MCLUNE</span>
-        <h3 className="text-[15px] font-[600]">
-          <Link className="link transition-all">
-            FLORES Stylish Fashion Backpack For Girls and Boys
+        <span className="text-[12px] text-black/70 font-[400]">
+          {props?.item?.brand}
+        </span>
+        <h3 className="text-[15px] w-[70%] font-[600]  truncate overflow-hidden whitespace-nowrap">
+          <Link
+            to={`/product-details/${props?.item?.productId}`}
+            className="link transition-all"
+          >
+            {props?.item?.productTitle}
           </Link>
         </h3>
 
-        <Rating name="size-small" defaultValue={4} size="small" readOnly />
+        <Rating
+          name="size-small"
+          value={props?.item?.rating}
+          size="small"
+          readOnly
+        />
 
         <div className="mt-1 flex items-center gap-4">
-          <div className="relative">
-            <span
-              onClick={handleClickFlavor}
-              className="flex items-center justify-center cursor-pointer bg-[#f1f1f1] text-[12px] rounded-md px-2 font-[500] py-1"
-            >
-              Hương vị: {selectedFlavor}
-              <GoTriangleDown />
-            </span>
+          {props?.productFlavorData?.length !== 0 && (
+            <div className="relative">
+              <span
+                onClick={handleClickFlavor}
+                className="flex items-center justify-center cursor-pointer bg-[#f1f1f1] text-[12px] rounded-md px-2 font-[500] py-1"
+              >
+                Hương vị: {selectedFlavor}
+                <GoTriangleDown />
+              </span>
 
-            <Menu
-              id="flavor-menu"
-              anchorEl={flavorAnchorEl}
-              open={openFlavor}
-              onClose={() => handleCloseFlavor(null)}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={() => handleCloseFlavor("Vani")} sx={{ color: selectedFlavor === "Vani" ? "#ff5252" : "inherit" }}>Vani</MenuItem>
-              <MenuItem onClick={() => handleCloseFlavor("Chocolate")} sx={{ color: selectedFlavor === "Chocolate" ? "#ff5252" : "inherit" }}>Chocolate</MenuItem>
-              <MenuItem onClick={() => handleCloseFlavor("Khoai môn")} sx={{ color: selectedFlavor === "Khoai môn" ? "#ff5252" : "inherit" }}>Khoai môn</MenuItem>
-            </Menu>
-          </div>
+              <Menu
+                id="flavor-menu"
+                anchorEl={flavorAnchorEl}
+                open={openFlavor}
+                onClose={() => handleCloseFlavor(null)}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                {props?.productFlavorData?.map((item, index) => {
+                  return (
+                    <MenuItem
+                    className={`${
+                      item?.name === selectedFlavor && 'selected'}`}
+                      key={index}
+                      onClick={() => handleCloseFlavor(item?.name)}
+                      sx={{
+                        color:
+                          selectedFlavor === item?.name ? "#ff5252" : "inherit",
+                      }}
+                    >
+                      {item?.name}
+                    </MenuItem>
+                  );
+                })}
+              </Menu>
+            </div>
+          )}
 
-          <span className="flex gap-2 items-center justify-center cursor-pointer text-[12px] rounded-md px-2 font-[500] py-1">
-            Số lượng:
-            <ButtonGroup
+          {props?.productWeightData?.length !== 0 && (
+            <div className="relative">
+              <span
+                onClick={handleClickWeight}
+                className="flex items-center justify-center cursor-pointer bg-[#f1f1f1] !text-[12px] rounded-md px-2 font-[500] py-1"
+              >
+                Cân nặng: {selectedWeight}
+                <GoTriangleDown />
+              </span>
+
+              <Menu
+                id="weight-menu"
+                anchorEl={weightAnchorEl}
+                open={openWeight}
+                onClose={() => handleCloseWeight(null)}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                {props?.productWeightData?.map((item, index) => {
+                  return (
+                    <MenuItem
+                      className={`${
+                        item?.name?.toString() === selectedWeight && 'selected'}`}
+                      key={index}
+                      onClick={() => handleCloseWeight(item?.name)}
+                      sx={{
+                        color:
+                          selectedWeight === item?.name?.toString() ? "#ff5252" : "inherit",
+                        fontSize: "12px"
+                      }}
+                    >
+                      {item?.name}
+                    </MenuItem>
+                  );
+                })}
+              </Menu>
+            </div>
+          )}
+        </div>
+
+        <div className="flex w-full gap-2 items-center mt-3 cursor-pointer text-[12px] rounded-md px-2 font-[500] py-1">
+          Số lượng:
+          <ButtonGroup
+            sx={{
+              border: "1px solid #ddd",
+              borderRadius: "5px",
+              overflow: "hidden",
+              height: "25px",
+            }}
+          >
+            <Button
+              onClick={handleDecrease}
               sx={{
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-                overflow: "hidden",
-                height: "25px",
+                border: "none",
+                color: "#555",
+                minWidth: "40px",
+                "&:hover": { backgroundColor: "#f8f8f8" },
               }}
             >
-              <Button
-                onClick={handleDecrease}
-                sx={{
-                  border: "none",
-                  color: "#555",
-                  minWidth: "40px",
-                  "&:hover": { backgroundColor: "#f8f8f8" },
-                }}
-              >
-                -
-              </Button>
+              -
+            </Button>
 
-              <Typography
-                sx={{
-                  px: 2,
-                  minWidth: 30,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderLeft: "1px solid #ddd",
-                  borderRight: "1px solid #ddd",
-                  fontSize: "13px",
-                  fontWeight: 500,
-                }}
-              >
-                {quantity}
-              </Typography>
+            <Typography
+              sx={{
+                px: 2,
+                minWidth: 30,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderLeft: "1px solid #ddd",
+                borderRight: "1px solid #ddd",
+                fontSize: "13px",
+                fontWeight: 500,
+              }}
+            >
+              {quantity}
+            </Typography>
 
-              <Button
-                onClick={handleIncrease}
-                sx={{
-                  border: "none",
-                  color: "#555",
-                  minWidth: "40px",
-                  "&:hover": { backgroundColor: "#f8f8f8" },
-                }}
-              >
-                +
-              </Button>
-            </ButtonGroup>
-          </span>
+            <Button
+              onClick={handleIncrease}
+              sx={{
+                border: "none",
+                color: "#555",
+                minWidth: "40px",
+                "&:hover": { backgroundColor: "#f8f8f8" },
+              }}
+            >
+              +
+            </Button>
+          </ButtonGroup>
         </div>
 
         <div className="flex items-center mt-1 gap-3">

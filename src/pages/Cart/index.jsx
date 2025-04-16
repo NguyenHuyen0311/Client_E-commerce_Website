@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { IoBagCheck } from "react-icons/io5";
 import CartItem from "./cartItem";
+import { myContext } from "../../App";
+import { fetchDataFromApi } from "../../utils/api";
 
 function Cart() {
+  const context = useContext(myContext);
+
+  const [productFlavorData, setProductFlavorData] = useState([]);
+  const [productWeightData, setProductWeightData] = useState([]);
+
+  useEffect(() => {
+    fetchDataFromApi(`/api/product/productFlavor/get`).then((res) => {
+      if (res?.error === false) {
+        setProductFlavorData(res?.data);
+      }
+    });
+
+    fetchDataFromApi(`/api/product/productWeight/get`).then((res) => {
+      if (res?.error === false) {
+        setProductWeightData(res?.data);
+      }
+    });
+  }, []);
+
   return (
     <section className="section py-8">
       <div className="container flex max-w-[80%] w-[80%] gap-4">
@@ -13,11 +34,27 @@ function Cart() {
               <h2 className="text-[15px] font-[600]">Giỏ hàng của bạn</h2>
               <p className="text-[13px] font-[400] mt-1">
                 Hiện đang có{" "}
-                <span className="text-[#ff5252] font-bold">18</span> sản phẩm
-                trong giỏ hàng của bạn
+                <span className="text-[#ff5252] font-bold">
+                  {context?.cartData?.length}
+                </span>{" "}
+                sản phẩm trong giỏ hàng của bạn
               </p>
             </div>
-            <CartItem flavor="Vani" />
+
+            {context?.cartData?.length !== 0 &&
+              context?.cartData?.map((item, index) => {
+                return (
+                  <CartItem
+                    flavor={item?.flavor}
+                    weight={item?.weight}
+                    productFlavorData={productFlavorData}
+                    productWeightData={productWeightData}
+                    quantity={item?.quantity}
+                    item={item}
+                    key={index}
+                  />
+                );
+              })}
           </div>
         </div>
 

@@ -19,21 +19,21 @@ import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Verify from "./pages/Verify";
 
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import ForgotPassword from "./pages/FogotPassword";
 import Checkout from "./pages/Checkout";
 import MyAccount from "./pages/MyAccount";
 import MyWishlist from "./pages/MyWishlist";
 import MyOrders from "./pages/MyOrders";
 import MyAddress from "./pages/MyAddress";
-import { fetchDataFromApi } from "./utils/api";
+import { fetchDataFromApi, postData } from "./utils/api";
 
 const myContext = createContext();
 
 function App() {
   const [openProductDetailsModal, setOpenProductDetailsModal] = useState({
     open: false,
-    item: {}
+    item: {},
   });
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("lg");
@@ -41,18 +41,29 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
   const [catData, setCatData] = useState([]);
+  const [cartData, setCartData] = useState([]);
+
+  const openAlertBox = (status, message) => {
+    if (status === "success") {
+      toast.success(message);
+    }
+
+    if (status === "error") {
+      toast.error(message);
+    }
+  };
 
   const handleopenProductDetailsModal = (status, item) => {
     setOpenProductDetailsModal({
       open: status,
-      item: item
+      item: item,
     });
   };
 
   const handleCloseProductDetailsModal = () => {
     setOpenProductDetailsModal({
       open: false,
-      item: {}
+      item: {},
     });
   };
 
@@ -62,34 +73,85 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if(token !== undefined && token !== null && token !== "") {
+
+    if (token !== undefined && token !== null && token !== "") {
       setIsLogin(true);
 
-      fetchDataFromApi(`/api/user/user-details?token=${token}`).then((res) => {
+      fetchDataFromApi(`/api/user/user-details`).then((res) => {
         setUserData(res.data);
-      })
+
+        if (res?.data?.error === true) {
+          if (res?.data?.message === "Bạn chưa đăng nhập!") {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+
+            openAlertBox(
+              "error",
+              "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!"
+            );
+            window.location.href = "/login";
+
+            setIsLogin(false);
+          }
+        }
+      });
+
+      getCartItems();
     } else {
       setIsLogin(false);
     }
-  }, [isLogin])
+  }, [isLogin]);
 
   useEffect(() => {
-      fetchDataFromApi("/api/category").then((res) => {
-        if (res?.error === false) {
-          setCatData(res?.data);
-        }
-      });
-    }, []);
+    fetchDataFromApi("/api/category").then((res) => {
+      if (res?.error === false) {
+        setCatData(res?.data);
+      }
+    });
+  }, []);
 
-  const openAlertBox = (status, message) => {
-    if(status === "success") {
-      toast.success(message);
+  const addToCart = (product, userId, quantity) => {
+    console.log(product);
+
+    if (userId === undefined) {
+      openAlertBox("error", "Bạn chưa đăng nhập!");
+      return false;
     }
 
-    if(status === "error") {
-      toast.error(message);
-    }
-  }
+    const data = {
+      productTitle: product?.name,
+      image: product?.image,
+      rating: product?.rating,
+      price: product?.price,
+      oldPrice: product?.oldPrice,
+      discount: product?.discount,
+      flavor: product?.flavor,
+      weight: product?.weight,
+      quantity: quantity,
+      subTotal: parseInt(product?.price * quantity),
+      productId: product?._id,
+      countInStock: product?.countInStock,
+      brand: product?.brand,
+    };
+
+    postData("/api/cart/add", data).then((res) => {
+      if (res?.error === false) {
+        openAlertBox("success", res?.message);
+
+        getCartItems();
+      } else {
+        openAlertBox("error", res?.message);
+      }
+    });
+  };
+
+  const getCartItems = () => {
+    fetchDataFromApi(`/api/cart/get`).then((res) => {
+      if (res?.error === false) {
+        setCartData(res?.data);
+      }
+    });
+  };
 
   const values = {
     setOpenProductDetailsModal,
@@ -104,6 +166,9 @@ function App() {
     setUserData,
     catData,
     setCatData,
+    addToCart,
+    cartData,
+    getCartItems,
   };
 
   return (

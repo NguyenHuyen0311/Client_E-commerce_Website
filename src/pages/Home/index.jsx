@@ -31,6 +31,10 @@ function Home() {
   const context = useContext(myContext);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
+  useEffect(() => {
     fetchDataFromApi("/api/homeSlider").then((res) => {
       setHomeSlidesData(res?.data);
     });
@@ -118,9 +122,7 @@ function Home() {
             </div>
           </div>
 
-          {
-            productsData?.length === 0 && <ProductLoading />
-          }
+          {productsData?.length === 0 && <ProductLoading />}
 
           {productsData?.length !== 0 && (
             <ProductsSlider item={5} data={productsData} />
@@ -130,7 +132,7 @@ function Home() {
 
       <section className="bg-white pb-10">
         <div className="container w-full">
-            <HomeProductSaleBanner />
+          <HomeProductSaleBanner />
         </div>
       </section>
 
@@ -162,9 +164,7 @@ function Home() {
             <div className="right-section w-[25%]"></div>
           </div>
 
-          {
-            allProductsData?.length === 0 && <ProductLoading />
-          }
+          {allProductsData?.length === 0 && <ProductLoading />}
 
           {allProductsData?.length !== 0 && (
             <ProductsSlider
@@ -188,9 +188,7 @@ function Home() {
             <div className="right-section w-[25%]"></div>
           </div>
 
-          {
-            featuredProductsData?.length === 0 && <ProductLoading />
-          }
+          {featuredProductsData?.length === 0 && <ProductLoading />}
 
           {featuredProductsData?.length !== 0 && (
             <ProductsSlider item={5} data={featuredProductsData} />
@@ -198,8 +196,7 @@ function Home() {
         </div>
       </section>
 
-      {
-        blogData?.length !== 0 && 
+      {blogData?.length !== 0 && (
         <section className="blog-section pb-5  pt-0 bg-white">
           <div className="container">
             <h2 className="pb-6 text-[20px] font-[700] text-[#3b3a3a]">
@@ -212,19 +209,17 @@ function Home() {
               navigation={true}
               modules={[Navigation]}
             >
-              {
-                blogData?.map((item, index) => {
-                  return (
-                    <SwiperSlide key={index}>
-                      <BlogItem item={item} />
-                    </SwiperSlide>
-                  )
-                })
-              }
+              {blogData?.map((item, index) => {
+                return (
+                  <SwiperSlide key={index}>
+                    <BlogItem item={item} />
+                  </SwiperSlide>
+                );
+              })}
             </Swiper>
           </div>
         </section>
-      }
+      )}
     </div>
   );
 }
