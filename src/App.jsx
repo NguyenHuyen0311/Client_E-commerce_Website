@@ -30,10 +30,12 @@ function App() {
     item: {},
   });
   const [openCartPanel, setOpenCartPanel] = useState(false);
+  const [openAddressPanel, setOpenAddressPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
   const [catData, setCatData] = useState([]);
   const [cartData, setCartData] = useState([]);
+  const [addressList, setAddressList] = useState([]);
 
   const openAlertBox = (status, message) => {
     if (status === "success") {
@@ -63,37 +65,44 @@ function App() {
     setOpenCartPanel(newOpen);
   };
 
+  const toggleDrawerAddressPanel = (newOpen) => () => {
+    setOpenAddressPanel(newOpen);
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 
     if (token !== undefined && token !== null && token !== "") {
       setIsLogin(true);
 
-      fetchDataFromApi(`/api/user/user-details`).then((res) => {
-        setUserData(res.data);
-
-        if (res?.data?.error === true) {
-          if (res?.data?.message === "Bạn chưa đăng nhập!") {
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-
-            openAlertBox(
-              "error",
-              "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!"
-            );
-            window.location.href = "/login";
-
-            setIsLogin(false);
-          }
-        }
-      });
-
+      getUserDetails();
       getCartItems();
     } else {
       setIsLogin(false);
       setCartData([]);
     }
   }, [isLogin]);
+
+  const getUserDetails = () => {
+    fetchDataFromApi(`/api/user/user-details`).then((res) => {
+      setUserData(res.data);
+
+      if (res?.data?.error === true) {
+        if (res?.data?.message === "Bạn chưa đăng nhập!") {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+
+          openAlertBox(
+            "error",
+            "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!"
+          );
+          window.location.href = "/login";
+
+          setIsLogin(false);
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     fetchDataFromApi("/api/category").then((res) => {
@@ -148,6 +157,20 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    getAddressLists();
+  }, []);
+
+  const getAddressLists = () => {
+    fetchDataFromApi(`/api/address/get`, { withCredentials: true }).then(
+      (res) => {
+        if (res?.success) {
+          setAddressList(res.address || []);
+        }
+      }
+    );
+  };
+
   const values = {
     openProductDetailsModal,
     setOpenProductDetailsModal,
@@ -156,6 +179,9 @@ function App() {
     setOpenCartPanel,
     toggleDrawerCartPanel,
     openCartPanel,
+    setOpenAddressPanel,
+    openAddressPanel,
+    toggleDrawerAddressPanel,
     openAlertBox,
     isLogin,
     setIsLogin,
@@ -166,6 +192,9 @@ function App() {
     addToCart,
     cartData,
     getCartItems,
+    getUserDetails,
+    getAddressLists,
+    addressList,
   };
 
   return (
@@ -205,7 +234,6 @@ function App() {
       </BrowserRouter>
 
       <Toaster />
-
     </>
   );
 }

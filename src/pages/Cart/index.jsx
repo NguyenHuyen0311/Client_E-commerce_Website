@@ -13,7 +13,7 @@ function Cart() {
   const [productWeightData, setProductWeightData] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 
     fetchDataFromApi(`/api/product/productFlavor/get`).then((res) => {
       if (res?.error === false) {
@@ -44,7 +44,7 @@ function Cart() {
               </p>
             </div>
 
-            {context?.cartData?.length !== 0 ?
+            {context?.cartData?.length !== 0 ? (
               context?.cartData?.map((item, index) => {
                 return (
                   <CartItem
@@ -58,19 +58,19 @@ function Cart() {
                   />
                 );
               })
-              : 
-              (
-                <>
-            <div className="flex items-center justify-center pt-8 pb-12 flex-col">
-              <img src="/empty-cart.png" className="w-[120px]" />
-              <h4 className="font-[500] text-[16px] mb-3">Giỏ hàng của bạn hiện đang trống</h4>
-              <Link to="/product-list">
-                <Button className="btn-org">Tiếp tục mua sắm</Button>
-              </Link>
-            </div>
-          </>
-              )
-            }
+            ) : (
+              <>
+                <div className="flex items-center justify-center pt-8 pb-12 flex-col">
+                  <img src="/empty-cart.png" className="w-[120px]" />
+                  <h4 className="font-[500] text-[16px] mb-3">
+                    Giỏ hàng của bạn hiện đang trống
+                  </h4>
+                  <Link to="/product-list">
+                    <Button className="btn-org">Tiếp tục mua sắm</Button>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -83,12 +83,13 @@ function Cart() {
             <p className="mt-3 flex items-center justify-between">
               <span className="text-[13px] font-[400]">Tạm tính:</span>
               <span className="text-[13px] text-[#ff5252] font-[600]">
-              {(context?.cartData?.length !== 0
+                {(context?.cartData?.length !== 0
                   ? context?.cartData
                       ?.map((item) => parseInt(item.price) * item.quantity)
                       .reduce((total, value) => total + value, 0)
                   : 0
-                )?.toLocaleString("vi-VN")}đ
+                )?.toLocaleString("vi-VN")}
+                đ
               </span>
             </p>
 
@@ -105,19 +106,22 @@ function Cart() {
             <p className="mt-3 mb-5 pt-3 flex items-center justify-between border-t">
               <span className="text-[13px] font-[400]">Tổng tiền:</span>
               <span className="text-[13px] text-[#ff5252] font-[700]">
-              {(context?.cartData?.length !== 0
+                {(context?.cartData?.length !== 0
                   ? context?.cartData
                       ?.map((item) => parseInt(item.price) * item.quantity)
                       .reduce((total, value) => total + value, 0)
                   : 0
-                )?.toLocaleString("vi-VN")}đ
+                )?.toLocaleString("vi-VN")}
+                đ
               </span>
             </p>
 
-            <Button className="btn-org w-full flex items-center gap-2">
-              <IoBagCheck className="text-[18px]" />
-              Thanh toán
-            </Button>
+            <Link to="/checkout">
+              <Button className="btn-org w-full flex items-center gap-2">
+                <IoBagCheck className="text-[18px]" />
+                Thanh toán
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

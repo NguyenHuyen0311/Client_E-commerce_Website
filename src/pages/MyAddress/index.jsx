@@ -177,7 +177,10 @@ function MyAddress() {
           fetchDataFromApi(`/api/address/get`, { withCredentials: true }).then(
             (res) => {
               if (res?.success) {
-                setAddressList(res.address);
+                setAddressList(res.address || []);
+                context?.getUserDetails();
+              } else {
+                setAddressList([]);
               }
             }
           );
@@ -202,51 +205,62 @@ function MyAddress() {
           <div className="card bg-white p-5 shadow-md rounded-md">
             <div className="flex items-center justify-between border-b !pb-2">
               <h2 className="text-[15px] font-[600]">Địa chỉ nhận hàng</h2>
-              <Button onClick={() => setAddressFormMode("add")}>
+              <Button
+                variant="outlined"
+                onClick={() => setAddressFormMode("add")}
+              >
                 Thêm địa chỉ
               </Button>
             </div>
 
-            {addressList.map((item, index) => (
-              <div key={item._id} className="mt-5 border-b pb-3">
-                <div className="flex items-center justify-between">
-                  <div className="content-address">
-                    <span className="bg-[#f1f1f1] text-black/70 text-xs px-2 py-1 rounded">
-                      {item.position}
-                    </span>
-                    <p className="text-[14px] font-[500] mt-2">
-                      {item.name} - {item.mobile}
-                    </p>
-                    <p className="text-[13px] text-gray-600 mt-1">
-                      {item.address_details}
-                    </p>
-                  </div>
-                  <div className="flex gap-1">
-                    <Tooltip title="Sửa" className="text-black/90 !text-[17px]">
-                      <IconButton
-                        onClick={() => {
-                          setSelectedAddress(item);
-                          setFormFields({
-                            name: item.name,
-                            mobile: item.mobile,
-                            address_details: item.address_details,
-                            position: item.position,
-                          });
-                          setAddressFormMode("edit");
-                        }}
+            <div className="max-h-[300px] pr-3 overflow-y-scroll ">
+              {addressList.map((item, index) => (
+                <div key={item._id} className="mt-5 border-b pb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="content-address">
+                      <span className="bg-[#f1f1f1] text-black/70 text-xs px-2 py-1 rounded">
+                        {item.position}
+                      </span>
+                      <p className="text-[14px] font-[500] mt-2">
+                        {item.name} - {item.mobile}
+                      </p>
+                      <p className="text-[13px] text-gray-600 mt-1">
+                        {item.address_details}
+                      </p>
+                    </div>
+                    <div className="flex gap-1">
+                      <Tooltip
+                        title="Sửa"
+                        className="text-black/90 !text-[17px]"
                       >
-                        <FaEdit />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Xóa" className="text-black/90 !text-[17px]">
-                      <IconButton onClick={() => removeAddress(item?._id)}>
-                        <FaTrash />
-                      </IconButton>
-                    </Tooltip>
+                        <IconButton
+                          onClick={() => {
+                            setSelectedAddress(item);
+                            setFormFields({
+                              name: item.name,
+                              mobile: item.mobile,
+                              address_details: item.address_details,
+                              position: item.position,
+                            });
+                            setAddressFormMode("edit");
+                          }}
+                        >
+                          <FaEdit />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip
+                        title="Xóa"
+                        className="text-black/90 !text-[17px]"
+                      >
+                        <IconButton onClick={() => removeAddress(item?._id)}>
+                          <FaTrash />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
             <Collapse isOpened={addressFormMode === "add"}>
               <h3 className="text-[14px] font-[600] mt-5 w-full">
