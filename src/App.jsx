@@ -8,12 +8,6 @@ import Footer from "./components/Footer";
 import ProductDetails from "./pages/ProductDetails";
 import { createContext } from "react";
 
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import ProductZoom from "./components/ProductZoom";
-import { IoMdClose } from "react-icons/io";
-import ProductDetailsContent from "./components/ProductDetailsContent";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
@@ -35,8 +29,6 @@ function App() {
     open: false,
     item: {},
   });
-  const [fullWidth, setFullWidth] = useState(true);
-  const [maxWidth, setMaxWidth] = useState("lg");
   const [openCartPanel, setOpenCartPanel] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -99,6 +91,7 @@ function App() {
       getCartItems();
     } else {
       setIsLogin(false);
+      setCartData([]);
     }
   }, [isLogin]);
 
@@ -139,8 +132,10 @@ function App() {
         openAlertBox("success", res?.message);
 
         getCartItems();
+        return true;
       } else {
         openAlertBox("error", res?.message);
+        return false;
       }
     });
   };
@@ -154,8 +149,10 @@ function App() {
   };
 
   const values = {
+    openProductDetailsModal,
     setOpenProductDetailsModal,
     handleopenProductDetailsModal,
+    handleCloseProductDetailsModal,
     setOpenCartPanel,
     toggleDrawerCartPanel,
     openCartPanel,
@@ -209,38 +206,6 @@ function App() {
 
       <Toaster />
 
-      <Dialog
-        open={openProductDetailsModal.open}
-        fullWidth={fullWidth}
-        maxWidth={maxWidth}
-        onClose={handleCloseProductDetailsModal}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        className="product-details-modal"
-      >
-        <DialogContent>
-          <div className="relative flex items-center w-full product-details-modal-wrap">
-            <Button
-              className="!w-[33px] !h-[33px] !bg-[#f1f1f1] !min-w-[33px] !rounded-full !text-[#000] !absolute top-[10px] right-[10px]"
-              onClick={handleCloseProductDetailsModal}
-            >
-              <IoMdClose className="text-[20px]" />
-            </Button>
-
-            {openProductDetailsModal?.item?.length !== 0 && (
-              <>
-                <div className="col-1 w-[40%] mx-3 my-8">
-                  <ProductZoom images={openProductDetailsModal?.item?.images} />
-                </div>
-
-                <div className="col-2 w-[60%] px-7 py-8 product-content-container">
-                  <ProductDetailsContent item={openProductDetailsModal?.item} />
-                </div>
-              </>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

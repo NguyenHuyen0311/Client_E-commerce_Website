@@ -10,6 +10,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { deleteData, editData } from "../../utils/api";
+import { IoClose } from "react-icons/io5";
 
 function ProductItem(props) {
   const [quantity, setQuantity] = useState(1);
@@ -20,25 +21,29 @@ function ProductItem(props) {
   const [isShowTabs, setIsShowTabs] = useState(false);
   const [selectedTabName, setSelectedTabName] = useState("");
   const [selectedTabName2, setSelectedTabName2] = useState("");
+  const [hasClickedOnce, setHasClickedOnce] = useState(false);
 
   const context = useContext(myContext);
 
   const addToCart = (product, userId, quantity) => {
     const hasFlavor = props?.item?.productFlavor?.length > 0;
     const hasWeight = props?.item?.productWeight?.length > 0;
-
+  
     const isFlavorSelected = !hasFlavor || selectedTabName !== "";
     const isWeightSelected = !hasWeight || selectedTabName2 !== "";
-
+  
     if (!isFlavorSelected || !isWeightSelected) {
       setIsShowTabs(true);
-      context?.openAlertBox(
-        "error",
-        "Vui lòng chọn đầy đủ phân loại sản phẩm!"
-      );
+  
+      if (hasClickedOnce) {
+        context?.openAlertBox("error", "Vui lòng chọn đầy đủ phân loại sản phẩm!");
+      } else {
+        setHasClickedOnce(true);
+      }
+  
       return;
     }
-
+  
     const productItem = {
       _id: product?._id,
       name: product?.name,
@@ -55,24 +60,12 @@ function ProductItem(props) {
       countInStock: product?.countInStock,
       brand: product?.brand,
     };
-
-    if (
-      props?.item?.productFlavor?.length !== 0 ||
-      props?.item?.productWeight?.length !== 0
-    ) {
-      setIsShowTabs(true);
-    } else {
-      context?.addToCart(productItem, userId, quantity);
-      setIsAdded(true);
-      setIsShowTabs(false);
-    }
-
-    if (activeTab !== null) {
-      context?.addToCart(productItem, userId, quantity);
-      setIsAdded(true);
-      setIsShowTabs(false);
-    }
+  
+    context?.addToCart(productItem, userId, quantity);
+    setIsAdded(true);
+    setIsShowTabs(false);
   };
+  
 
   const handleClickActiveTab = (index, name) => {
     setActiveTab(index);
@@ -118,7 +111,7 @@ function ProductItem(props) {
         subTotal: props?.item?.price * newQty,
       };
 
-      editData(`/api/cart/update-quantity`, obj).then((res) => {
+      editData(`/api/cart/update-cart-item`, obj).then((res) => {
         setQuantity(newQty);
         context?.openAlertBox("success", res?.data?.message);
         context?.getCartItems();
@@ -135,7 +128,7 @@ function ProductItem(props) {
         quantity: quantity + 1,
         subTotal: props?.item?.price * (quantity + 1),
       };
-      editData(`/api/cart/update-quantity`, obj).then((res) => {
+      editData(`/api/cart/update-cart-item`, obj).then((res) => {
         context?.openAlertBox("success", res?.data?.message);
         context?.getCartItems();
       });
@@ -166,24 +159,26 @@ function ProductItem(props) {
         </Link>
 
         {isShowTabs === true && (
-          <div className="flex overflow-x-auto items-center justify-center absolute top-0 left-0 w-full h-full bg-black/60 p-3 gap-2">
+          <div className="flex overflow-x-auto z-[100] items-center justify-center absolute top-0 left-0 w-full h-full bg-black/60 p-3 gap-2">
+            <IoClose onClick={() => setIsShowTabs(false)} className="absolute cursor-pointer text-white text-[25px] link right-[10px] top-[10px]" />
+            
             <div className="flex flex-col">
-            <div className="flex mt-2 gap-2 overflow-x-auto items-center justify-center">
-              {props?.item?.productFlavor?.length !== 0 &&
-                props?.item?.productFlavor?.map((flavor, index) => {
-                  return (
-                    <span
-                      key={index}
-                      onClick={() => handleClickActiveTab(index, flavor)}
-                      className={`${
-                        activeTab === index && "!bg-[#ff5252] !text-white"
-                      } flex items-center justify-center p-1 px-2 bg-white/80 min-w-[30px] h-[30px] rounded-sm cursor-pointer hover:bg-white`}
-                    >
-                      {flavor}
-                    </span>
-                  );
-                })}
-            </div>
+              <div className="flex mt-2 gap-2 overflow-x-auto items-center justify-center">
+                {props?.item?.productFlavor?.length !== 0 &&
+                  props?.item?.productFlavor?.map((flavor, index) => {
+                    return (
+                      <span
+                        key={index}
+                        onClick={() => handleClickActiveTab(index, flavor)}
+                        className={`${
+                          activeTab === index && "!bg-[#ff5252] !text-white"
+                        } flex items-center justify-center p-1 px-2 bg-white/80 min-w-[30px] h-[30px] rounded-sm cursor-pointer hover:bg-white`}
+                      >
+                        {flavor}
+                      </span>
+                    );
+                  })}
+              </div>
 
               <div className="flex mt-2 gap-2 items-center justify-center">
                 {props?.item?.productWeight?.length !== 0 &&

@@ -61,7 +61,9 @@ function Header() {
 
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userEmail");
         context?.setUserData(null);
+        context?.setCartData([]);
 
         history("/");
       }
@@ -328,7 +330,15 @@ function Header() {
 
         {
           context?.cartData?.length !== 0 ? 
-        <CartPanel data={context?.cartData} /> : "Giỏ hàng trống"
+        <CartPanel data={context?.cartData} /> : (
+          <>
+            <div className="flex items-center justify-center pt-[200px] flex-col">
+              <img src="/empty-cart.png" className="w-[150px]" />
+              <h4 className="font-[500] text-[16px] mb-3">Giỏ hàng của bạn hiện đang trống</h4>
+              <Button onClick={context.toggleDrawerCartPanel(false)} className="btn-org">Tiếp tục mua sắm</Button>
+            </div>
+          </>
+        )
         }
 
       </Drawer>

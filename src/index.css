@@ -294,6 +294,10 @@ button .MuiCircularProgress-root {
   height: 30px !important; 
 }
 
+button.btn-org .MuiCircularProgress-root {
+  color: #fff !important; 
+}
+
 header {
   box-shadow: 0px 1px 5px #0000001a;
 }

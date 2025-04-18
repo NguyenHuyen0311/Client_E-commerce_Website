@@ -2,18 +2,21 @@ import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { FaAngleUp, FaAngleDown } from "react-icons/fa6";
 
-function QuantityBox() {
+function QuantityBox(props) {
   const [quantityValue, setQuantityValue] = useState(1);
 
   const plusQuantity = () => {
     setQuantityValue(quantityValue + 1);
+    props.handleSelectedQty(quantityValue + 1);
   };
 
   const minusQuantity = () => {
     if (quantityValue === 1) {
       setQuantityValue(1);
+      props.handleSelectedQty(1);
     } else {
       setQuantityValue(quantityValue - 1);
+      props.handleSelectedQty(quantityValue - 1);
     }
   };
 

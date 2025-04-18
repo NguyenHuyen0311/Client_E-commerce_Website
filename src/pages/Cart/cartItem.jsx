@@ -1,23 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { GoTriangleDown } from "react-icons/go";
 import { Button, ButtonGroup, Rating, Typography } from "@mui/material";
+import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
+import { myContext } from "../../App";
 
 function CartItem(props) {
-  const [quantity, setQuantity] = useState(1);
   const [flavorAnchorEl, setFlavorAnchorEl] = useState(null);
   const [weightAnchorEl, setWeightAnchorEl] = useState(null);
   const [selectedFlavor, setSelectedFlavor] = useState(props.flavor);
   const [selectedWeight, setSelectedWeight] = useState(props.weight);
+  const [productData, setProductData] = useState([]);
 
-  const handleIncrease = () => setQuantity((prev) => prev + 1);
-  const handleDecrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  const context = useContext(myContext);
 
   const openFlavor = Boolean(flavorAnchorEl);
   const openWeight = Boolean(weightAnchorEl);
+
+  useEffect(() => {
+    fetchDataFromApi(`/api/product/${props?.item?.productId}`).then((res) => {
+      setProductData((prevData) => [...prevData, res.product]);
+    });
+  }, []);
 
   const handleClickFlavor = (event) => {
     setFlavorAnchorEl(event.currentTarget);
@@ -41,9 +48,133 @@ function CartItem(props) {
     }
   };
 
+  const updateCart = (selectedVal, quantity) => {
+    handleCloseFlavor(selectedVal);
+
+    fetchDataFromApi(`/api/product/${props?.item?.productId}`).then((res) => {
+      const product = res?.product;
+
+      const itemFlavor = product?.productFlavor || [];
+      const isFlavorExist = itemFlavor.includes(selectedVal);
+
+      if (!isFlavorExist) {
+        context?.openAlertBox("error", "Không tìm thấy hương vị");
+        return;
+      }
+
+      const cartObj = {
+        _id: props?.item?._id,
+        quantity: quantity,
+        subTotal: props?.item?.price * quantity,
+        flavor: selectedVal,
+        weight: selectedWeight,
+      };
+
+      editData("/api/cart/update-cart-item", cartObj).then((res) => {
+        if (res?.data?.error === false) {
+          context?.openAlertBox("success", res?.data?.message);
+          setSelectedFlavor(selectedVal);
+          context?.getCartItems();
+        }
+      });
+    });
+  };
+
+  const updateCart2 = (selectedVal, quantity) => {
+    handleCloseWeight(selectedVal);
+
+    fetchDataFromApi(`/api/product/${props?.item?.productId}`).then((res) => {
+      const product = res?.product;
+
+      const itemWeight = product?.productWeight || [];
+      const isWeightExist = itemWeight.includes(selectedVal);
+
+      if (!isWeightExist) {
+        context?.openAlertBox("error", "Không tìm thấy cân nặng");
+        return;
+      }
+
+      const cartObj = {
+        _id: props?.item?._id,
+        quantity: quantity,
+        subTotal: props?.item?.price * quantity,
+        flavor: selectedFlavor,
+        weight: selectedVal,
+      };
+
+      editData("/api/cart/update-cart-item", cartObj).then((res) => {
+        if (res?.data?.error === false) {
+          context?.openAlertBox("success", res?.data?.message);
+          setSelectedWeight(selectedVal);
+          context?.getCartItems();
+        }
+      });
+    });
+  };
+
+  const handleDecrease = () => {
+    const cartItem = props.item;
+
+    if (cartItem?.quantity <= 1) {
+      deleteData(`/api/cart/delete-cart-item/${cartItem._id}`).then((res) => {
+        context?.openAlertBox("success", res?.message);
+        context?.getCartItems();
+      });
+    } else {
+      const newQty = cartItem.quantity - 1;
+      const obj = {
+        _id: cartItem._id,
+        quantity: newQty,
+        subTotal: cartItem.price * newQty,
+        flavor: selectedFlavor,
+        weight: selectedWeight,
+      };
+
+      editData(`/api/cart/update-cart-item`, obj).then((res) => {
+        context?.openAlertBox("success", res?.data?.message);
+        context?.getCartItems();
+      });
+    }
+  };
+
+  const handleIncrease = () => {
+    const cartItem = props.item;
+
+    if (cartItem?.quantity < cartItem?.countInStock) {
+      const newQty = cartItem.quantity + 1;
+      const obj = {
+        _id: cartItem._id,
+        quantity: newQty,
+        subTotal: cartItem.price * newQty,
+        flavor: selectedFlavor,
+        weight: selectedWeight,
+      };
+
+      editData(`/api/cart/update-cart-item`, obj).then((res) => {
+        context?.openAlertBox("success", res?.data?.message);
+        context?.getCartItems();
+      });
+    } else {
+      context?.openAlertBox(
+        "warning",
+        "Số lượng bạn chọn đã đạt giới hạn số lượng sản phẩm!"
+      );
+    }
+  };
+
+  const removeItem = (id) => {
+    deleteData(`/api/cart/delete-cart-item/${id}`).then((res) => {
+      context?.openAlertBox("success", res?.message);
+      context?.getCartItems();
+    });
+  };
+
   return (
     <div className="viewcart-item pb-5 border-b relative w-full p-3 flex items-center gap-4">
-      <IoMdClose className="cursor-pointer absolute top-[15px] link transition-all right-[15px] text-[22px]" />
+      <IoMdClose
+        onClick={() => removeItem(props?.item?._id)}
+        className="cursor-pointer absolute top-[15px] link transition-all right-[15px] text-[22px]"
+      />
 
       <div className="img w-[15%] rounded-md overflow-hidden">
         <Link
@@ -78,7 +209,7 @@ function CartItem(props) {
         />
 
         <div className="mt-1 flex items-center gap-4">
-          {props?.productFlavorData?.length !== 0 && (
+          {productData[0]?.productFlavor?.length !== 0 && (
             <div className="relative">
               <span
                 onClick={handleClickFlavor}
@@ -100,10 +231,13 @@ function CartItem(props) {
                 {props?.productFlavorData?.map((item, index) => {
                   return (
                     <MenuItem
-                    className={`${
-                      item?.name === selectedFlavor && 'selected'}`}
+                      className={`${
+                        item?.name === selectedFlavor && "selected"
+                      }`}
                       key={index}
-                      onClick={() => handleCloseFlavor(item?.name)}
+                      onClick={() =>
+                        updateCart(item?.name, props?.item?.quantity)
+                      }
                       sx={{
                         color:
                           selectedFlavor === item?.name ? "#ff5252" : "inherit",
@@ -117,7 +251,7 @@ function CartItem(props) {
             </div>
           )}
 
-          {props?.productWeightData?.length !== 0 && (
+          {productData[0]?.productWeight?.length !== 0 && (
             <div className="relative">
               <span
                 onClick={handleClickWeight}
@@ -140,13 +274,18 @@ function CartItem(props) {
                   return (
                     <MenuItem
                       className={`${
-                        item?.name?.toString() === selectedWeight && 'selected'}`}
+                        item?.name?.toString() === selectedWeight && "selected"
+                      }`}
                       key={index}
-                      onClick={() => handleCloseWeight(item?.name)}
+                      onClick={() =>
+                        updateCart2(item?.name, props?.item?.quantity)
+                      }
                       sx={{
                         color:
-                          selectedWeight === item?.name?.toString() ? "#ff5252" : "inherit",
-                        fontSize: "12px"
+                          selectedWeight === item?.name?.toString()
+                            ? "#ff5252"
+                            : "inherit",
+                        fontSize: "12px",
                       }}
                     >
                       {item?.name}
@@ -193,7 +332,7 @@ function CartItem(props) {
                 fontWeight: 500,
               }}
             >
-              {quantity}
+              {props?.item?.quantity}
             </Typography>
 
             <Button
@@ -212,13 +351,13 @@ function CartItem(props) {
 
         <div className="flex items-center mt-1 gap-3">
           <span className="new-price text-[#000] text-[15px]  font-[600]">
-            20.000đ
+            {props?.item?.price?.toLocaleString("vi-VN")}đ
           </span>
           <span className="old-price text-[14px] line-through text-gray-500">
-            30.000đ
+            {props?.item?.oldPrice?.toLocaleString("vi-VN")}đ
           </span>
           <span className="sale text-[#ff5252] text-[14px]  font-[500]">
-            Giảm 33%
+            Giảm {props?.item?.discount}%
           </span>
         </div>
       </div>
