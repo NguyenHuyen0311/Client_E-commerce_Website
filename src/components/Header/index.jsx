@@ -64,6 +64,7 @@ function Header() {
         localStorage.removeItem("userEmail");
         context?.setUserData(null);
         context?.setCartData([]);
+        context?.setMyWishlistData([]);
 
         history("/");
       }
@@ -285,11 +286,13 @@ function Header() {
 
               <li>
                 <Tooltip title="Yêu thích">
-                  <IconButton aria-label="wishlist">
-                    <StyledBadge badgeContent={4} color="secondary">
-                      <FaRegHeart className="!text-[21px]" />
-                    </StyledBadge>
-                  </IconButton>
+                  <Link to="/my-wishlist">
+                    <IconButton aria-label="wishlist">
+                      <StyledBadge badgeContent={context?.myWishlistData?.length !== 0 ? context?.myWishlistData?.length : 0} color="secondary">
+                        <FaRegHeart className="!text-[21px]" />
+                      </StyledBadge>
+                    </IconButton>
+                  </Link>
                 </Tooltip>
               </li>
 

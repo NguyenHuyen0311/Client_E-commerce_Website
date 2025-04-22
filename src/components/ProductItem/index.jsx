@@ -9,12 +9,14 @@ import { myContext } from "../../App";
 import { IoCartOutline } from "react-icons/io5";
 import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
-import { deleteData, editData } from "../../utils/api";
+import { deleteData, editData, postData } from "../../utils/api";
 import { IoClose } from "react-icons/io5";
+import { FaHeart } from "react-icons/fa";
 
 function ProductItem(props) {
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
+  const [isAddedInMyWishlist, setIsAddedInMyWishlist] = useState(false);
   const [cartItem, setCartItem] = useState([]);
   const [activeTab, setActiveTab] = useState(null);
   const [activeTab2, setActiveTab2] = useState(null);
@@ -28,22 +30,25 @@ function ProductItem(props) {
   const addToCart = (product, userId, quantity) => {
     const hasFlavor = props?.item?.productFlavor?.length > 0;
     const hasWeight = props?.item?.productWeight?.length > 0;
-  
+
     const isFlavorSelected = !hasFlavor || selectedTabName !== "";
     const isWeightSelected = !hasWeight || selectedTabName2 !== "";
-  
+
     if (!isFlavorSelected || !isWeightSelected) {
       setIsShowTabs(true);
-  
+
       if (hasClickedOnce) {
-        context?.openAlertBox("error", "Vui lòng chọn đầy đủ phân loại sản phẩm!");
+        context?.openAlertBox(
+          "error",
+          "Vui lòng chọn đầy đủ phân loại sản phẩm!"
+        );
       } else {
         setHasClickedOnce(true);
       }
-  
+
       return;
     }
-  
+
     const productItem = {
       _id: product?._id,
       name: product?.name,
@@ -60,12 +65,11 @@ function ProductItem(props) {
       countInStock: product?.countInStock,
       brand: product?.brand,
     };
-  
+
     context?.addToCart(productItem, userId, quantity);
     setIsAdded(true);
     setIsShowTabs(false);
   };
-  
 
   const handleClickActiveTab = (index, name) => {
     setActiveTab(index);
@@ -82,12 +86,22 @@ function ProductItem(props) {
       cartItem.productId.includes(props?.item?._id)
     );
 
+    const myWishlistItem = context?.myWishlistData?.filter((item) =>
+      item.productId.includes(props?.item?._id)
+    );
+
     if (item?.length > 0) {
       setCartItem(item);
       setIsAdded(true);
       setQuantity(item[0]?.quantity);
     } else {
       setQuantity(1);
+    }
+
+    if (myWishlistItem?.length > 0) {
+      setIsAddedInMyWishlist(true);
+    } else {
+      setIsAddedInMyWishlist(false);
     }
   }, [context?.cartData]);
 
@@ -140,6 +154,35 @@ function ProductItem(props) {
     }
   };
 
+  const handleAddToMyWishlist = (item) => {
+    if (context?.userData === null) {
+      context?.openAlertBox("error", "Bạn chưa đăng nhập!");
+      return false;
+    } else {
+      const obj = {
+        productId: item?._id,
+        userId: context?.userData?._id,
+        productTitle: item?.name,
+        image: item?.images[0],
+        rating: item?.rating,
+        price: item?.price,
+        oldPrice: item?.oldPrice,
+        brand: item?.brand,
+        discount: item?.discount,
+      };
+
+      postData("/api/myWishlist/add", obj).then((res) => {
+        if (res?.error === false) {
+          context?.openAlertBox("success", res?.message);
+          setIsAddedInMyWishlist(true);
+          context?.getMyWishlistData();
+        } else {
+          context?.openAlertBox("error", res?.message);
+        }
+      });
+    }
+  };
+
   return (
     <div className="product-item bg-white rounded-md overflow-hidden border-1 border-solid border-[#ddd] transition-all shadow-lg">
       <div className="group img-wrapper w-[100%] rounded-t-md overflow-hidden relative">
@@ -160,8 +203,11 @@ function ProductItem(props) {
 
         {isShowTabs === true && (
           <div className="flex overflow-x-auto z-[100] items-center justify-center absolute top-0 left-0 w-full h-full bg-black/60 p-3 gap-2">
-            <IoClose onClick={() => setIsShowTabs(false)} className="absolute cursor-pointer text-white text-[25px] link right-[10px] top-[10px]" />
-            
+            <IoClose
+              onClick={() => setIsShowTabs(false)}
+              className="absolute cursor-pointer text-white text-[25px] link right-[10px] top-[10px]"
+            />
+
             <div className="flex flex-col">
               <div className="flex mt-2 gap-2 overflow-x-auto items-center justify-center">
                 {props?.item?.productFlavor?.length !== 0 &&
@@ -212,8 +258,14 @@ function ProductItem(props) {
           >
             <MdZoomOutMap className="text-[18px]" />
           </Button>
-          <Button className="!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center">
+          <Button
+            onClick={() => handleAddToMyWishlist(props?.item)}
+            className={`!w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black !bg-white hover:!bg-[#ff5252] hover:!text-white transition-all flex items-center justify-center`}
+          >
+            {
+              isAddedInMyWishlist === true ? <FaHeart className="text-[16px]" /> : 
             <FaRegHeart className="text-[18px]" />
+            }
           </Button>
         </div>
       </div>

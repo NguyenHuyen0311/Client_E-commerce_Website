@@ -35,6 +35,7 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [catData, setCatData] = useState([]);
   const [cartData, setCartData] = useState([]);
+  const [myWishlistData, setMyWishlistData] = useState([]);
   const [addressList, setAddressList] = useState([]);
 
   const openAlertBox = (status, message) => {
@@ -77,9 +78,12 @@ function App() {
 
       getUserDetails();
       getCartItems();
+      getMyWishlistData();
     } else {
       setIsLogin(false);
       setCartData([]);
+      setMyWishlistData([]);
+      setUserData([]);
     }
   }, [isLogin]);
 
@@ -113,8 +117,6 @@ function App() {
   }, []);
 
   const addToCart = (product, userId, quantity) => {
-    console.log(product);
-
     if (userId === undefined) {
       openAlertBox("error", "Bạn chưa đăng nhập!");
       return false;
@@ -161,6 +163,14 @@ function App() {
     getAddressLists();
   }, []);
 
+  const getMyWishlistData = () => {
+    fetchDataFromApi(`/api/myWishlist`).then((res) => {
+      if(res?.error === false) {
+        setMyWishlistData(res?.data);
+      }
+    })
+  }
+
   const getAddressLists = () => {
     fetchDataFromApi(`/api/address/get`, { withCredentials: true }).then(
       (res) => {
@@ -193,8 +203,11 @@ function App() {
     cartData,
     getCartItems,
     getUserDetails,
-    getAddressLists,
+    myWishlistData,
+    setMyWishlistData,
+    getMyWishlistData,
     addressList,
+    getAddressLists,
   };
 
   return (

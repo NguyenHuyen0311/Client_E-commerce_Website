@@ -37,7 +37,9 @@ function ProductDetails() {
           `/api/product/getAllProductsBySubCatId/${res?.product?.subCatId}`
         ).then((res) => {
           if (res?.error === false) {
-            const filteredData = res?.products?.filter((item) => item._id !== id);
+            const filteredData = res?.products?.filter(
+              (item) => item._id !== id
+            );
             setRelatedProductData(filteredData);
           }
         });
@@ -107,7 +109,11 @@ function ProductDetails() {
               {activeTab === 0 && (
                 <>
                   <div className="w-full px-6 py-8 !shadow-md !rounded-md mt-4 text-sm text-gray-600">
-                    <p>{productData?.description}</p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: productData?.description,
+                      }}
+                    ></div>
                   </div>
                 </>
               )}
@@ -125,16 +131,14 @@ function ProductDetails() {
             </div>
 
             <div className="container pt-8 pb-5">
-              {
-                relatedProductData?.length !== 0 && (
-                  <>
-                    <h2 className="text-[20px] font-[700] text-[#3b3a3a]">
-                      Sản phẩm liên quan
-                    </h2>
-                    <ProductsSlider data={relatedProductData} item={5} />
-                  </>
-                )
-              }
+              {relatedProductData?.length !== 0 && (
+                <>
+                  <h2 className="text-[20px] font-[700] text-[#3b3a3a]">
+                    Sản phẩm liên quan
+                  </h2>
+                  <ProductsSlider data={relatedProductData} item={5} />
+                </>
+              )}
             </div>
           </>
         )}

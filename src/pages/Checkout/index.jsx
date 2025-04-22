@@ -183,13 +183,13 @@ function Checkout() {
                         className="flex items-center justify-between pt-3 pb-1.5"
                       >
                         <div className="part1 flex items-center w-[80%] gap-3 pr-4">
-                          <div className="w-[40%]">
+                          <div className="w-[30%]">
                             <div className="cursor-pointer img w-[60px] h-[60px] object-cover overflow-hidden rounded-md bg-center">
                               <img src={item?.image} />
                             </div>
                           </div>
 
-                          <div className="info">
+                          <div className="info w-[70%]">
                             <h4
                               title={item?.productTitle}
                               className="line-clamp-1 whitespace-nowrap, overflow-hidden, text-ellipsis text-[13px] font-[600]"

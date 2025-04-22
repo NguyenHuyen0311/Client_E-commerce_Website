@@ -80,7 +80,7 @@ function AccountSidebar() {
   };
 
   return (
-    <div className="card bg-white shadow-md rounded-md sticky top-[10px]">
+    <div className="card bg-white shadow-md rounded-md sticky top-[160px]">
       <div className="w-full p-5 flex items-center justify-center flex-col">
         <div className="group flex items-center justify-center bg-gray-200 w-[100px] h-[100px] cursor-pointer overflow-hidden bg-center relative mb-4 rounded-full">
           {uploading === true ? (

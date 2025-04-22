@@ -65,7 +65,7 @@ function Cart() {
                   <h4 className="font-[500] text-[16px] mb-3">
                     Giỏ hàng của bạn hiện đang trống
                   </h4>
-                  <Link to="/product-list">
+                  <Link to="/">
                     <Button className="btn-org">Tiếp tục mua sắm</Button>
                   </Link>
                 </div>

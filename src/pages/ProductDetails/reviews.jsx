@@ -77,8 +77,6 @@ const Reviews = (props) => {
         {reviewsData?.length !== 0 && (
           <div className="scrool w-full max-h-[300px] overflow-y-scroll overflow-x-hidden">
             {reviewsData?.map((item, index) => {
-              console.log(item);
-
               return (
                 <div
                   key={index}

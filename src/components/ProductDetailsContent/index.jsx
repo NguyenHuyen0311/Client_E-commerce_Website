@@ -118,12 +118,13 @@ function ProductDetailsContent(props) {
         </span>
       </div>
 
-      <p className="text-gray-500 mt-4 text-[13px]">
-        {props?.item?.description}
-      </p>
+      <div
+        className="text-gray-500 mt-4 text-[13px]"
+        dangerouslySetInnerHTML={{ __html: props?.item?.description }}
+      ></div>
 
       {props?.item?.productFlavor?.length !== 0 && (
-        <div className="flex items-center gap-3 mt-4">
+        <div className="flex items-center gap-3 mt-3">
           <span className="text-[14px] text-gray-600">Hương vị:</span>
           <div className="flex items-center gap-2 actions">
             {props?.item?.productFlavor?.map((item, index) => {
@@ -146,7 +147,7 @@ function ProductDetailsContent(props) {
       )}
 
       {props?.item?.productWeight?.length !== 0 && (
-        <div className="flex items-center gap-3 mt-4">
+        <div className="flex items-center gap-3 mt-3">
           <span className="text-[14px] text-gray-600">Cân nặng:</span>
           <div className="flex items-center gap-2 actions">
             {props?.item?.productWeight
