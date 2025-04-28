@@ -309,3 +309,7 @@ header {
 .MuiButtonBase-root.MuiMenuItem-root.MuiMenuItem-gutters.selected {
   @apply !text-[#ff5252]
 }
+
+.css-19t5dcl-MuiCircularProgress-circle {
+  color: #fff !important;
+}

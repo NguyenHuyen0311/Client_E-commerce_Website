@@ -122,10 +122,10 @@ function MyOrders() {
                                   : "Thanh toán khi nhận hàng"}
                               </TableCell>
                               <TableCell className="border whitespace-nowrap !text-center">
-                                {order?.delivery_address?.name}
+                                {order?.delivery_address?.name || order?.userId?.name}
                               </TableCell>
                               <TableCell className="border whitespace-nowrap !text-center">
-                                {order?.delivery_address?.mobile}
+                                {order?.delivery_address?.mobile || order?.userId?.mobile}
                               </TableCell>
                               <TableCell className="border whitespace-nowrap !text-center">
                                 {order?.delivery_address?.address_details}

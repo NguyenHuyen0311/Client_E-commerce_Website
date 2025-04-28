@@ -75,7 +75,7 @@ function Checkout() {
         deleteData(`/api/cart/empty-cart/${user?._id}`).then((res) => {
           context?.getCartItems();
         });
-        history("/");
+        history("/my-orders");
       } else {
         context.openAlertBox("error", res?.message);
       }

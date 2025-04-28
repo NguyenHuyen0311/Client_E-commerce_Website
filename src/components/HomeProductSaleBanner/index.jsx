@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useNavigate } from "react-router-dom";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -13,6 +14,7 @@ import { fetchDataFromApi } from "../../utils/api";
 
 function HomeProductSaleBanner(props) {
   const [allProductsData, setAllProductsData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchDataFromApi("/api/product/getAllProducts").then((res) => {
@@ -21,7 +23,7 @@ function HomeProductSaleBanner(props) {
   }, []);
 
   const slideBackgrounds = ["#f9facd", "#cdfafa"];
-  
+
   return (
     <>
       <div className="w-full flex gap-5">
@@ -78,7 +80,12 @@ function HomeProductSaleBanner(props) {
                               </span>
                             </h3>
                             <div>
-                              <Button className="btn-org text-center !px-4 !py-2">
+                              <Button
+                                className="btn-org text-center !px-4 !py-2"
+                                onClick={() =>
+                                  navigate(`/product-details/${item._id}`)
+                                }
+                              >
                                 MUA NGAY
                               </Button>
                             </div>
@@ -119,7 +126,10 @@ function HomeProductSaleBanner(props) {
                       </span>
                     </h3>
                     <div>
-                      <Button className="btn-org text-center !px-4 !py-2">
+                      <Button
+                        className="btn-org text-center !px-4 !py-2"
+                        onClick={() => navigate(`/product-details/${item._id}`)}
+                      >
                         MUA NGAY
                       </Button>
                     </div>

@@ -21,6 +21,7 @@ import MyWishlist from "./pages/MyWishlist";
 import MyOrders from "./pages/MyOrders";
 import MyAddress from "./pages/MyAddress";
 import { fetchDataFromApi, postData } from "./utils/api";
+import SearchPage from "./pages/Search";
 
 const myContext = createContext();
 
@@ -37,6 +38,7 @@ function App() {
   const [cartData, setCartData] = useState([]);
   const [myWishlistData, setMyWishlistData] = useState([]);
   const [addressList, setAddressList] = useState([]);
+  const [searchData, setSearchData] = useState([]);
 
   const openAlertBox = (status, message) => {
     if (status === "success") {
@@ -208,6 +210,8 @@ function App() {
     getMyWishlistData,
     addressList,
     getAddressLists,
+    searchData,
+    setSearchData
   };
 
   return (
@@ -241,6 +245,7 @@ function App() {
             <Route path="/my-wishlist" exact={true} element={<MyWishlist />} />
             <Route path="/my-orders" exact={true} element={<MyOrders />} />
             <Route path="/my-address" exact={true} element={<MyAddress />} />
+            <Route path="/search" exact={true} element={<SearchPage />} />
           </Routes>
           <Footer />
         </myContext.Provider>
