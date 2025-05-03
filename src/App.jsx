@@ -22,6 +22,11 @@ import MyOrders from "./pages/MyOrders";
 import MyAddress from "./pages/MyAddress";
 import { fetchDataFromApi, postData } from "./utils/api";
 import SearchPage from "./pages/Search";
+import BlogList from "./pages/BlogList";
+import BlogDetails from "./pages/BlogDetails";
+import Contact from "./pages/Contact";
+import Policy from "./pages/Policy";
+import AboutUs from "./pages/AboutUs";
 
 const myContext = createContext();
 
@@ -231,6 +236,16 @@ function App() {
               exact={true}
               element={<ProductDetails />}
             />
+            <Route
+              path="/blog-list"
+              exact={true}
+              element={<BlogList />}
+            />
+            <Route
+              path="/blog-details/:id"
+              exact={true}
+              element={<BlogDetails />}
+            />
             <Route path="/login" exact={true} element={<Login />} />
             <Route path="/register" exact={true} element={<Register />} />
             <Route path="/cart" exact={true} element={<Cart />} />
@@ -246,6 +261,9 @@ function App() {
             <Route path="/my-orders" exact={true} element={<MyOrders />} />
             <Route path="/my-address" exact={true} element={<MyAddress />} />
             <Route path="/search" exact={true} element={<SearchPage />} />
+            <Route path="/contact" exact={true} element={<Contact />} />
+            <Route path="/policy" exact={true} element={<Policy />} />
+            <Route path="/about-us" exact={true} element={<AboutUs />} />
           </Routes>
           <Footer />
         </myContext.Provider>

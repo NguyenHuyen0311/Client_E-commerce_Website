@@ -85,27 +85,27 @@ function Footer() {
               <h2 className="font-[500] text-lg">Về chúng tôi</h2>
               <ul className="list-none space-y-3">
                 <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
+                  <Link to="/about-us" className="hover:text-[#ff5252]">
                     Giới thiệu
                   </Link>
                 </li>
                 <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
+                  <Link to="/product-list" className="hover:text-[#ff5252]">
                     Cửa hàng
                   </Link>
                 </li>
                 <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
+                  <Link to="/blog-list" className="hover:text-[#ff5252]">
                     Bài viết
                   </Link>
                 </li>
-                <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
+                {/* <li className="text-[#3e3e3e] text-[15px]">
+                  <Link to="/contact" className="hover:text-[#ff5252]">
                     Liên hệ
                   </Link>
-                </li>
+                </li> */}
                 <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
+                  <Link to="/policy" className="hover:text-[#ff5252]">
                     Chính sách & bảo mật
                   </Link>
                 </li>
@@ -115,37 +115,22 @@ function Footer() {
             <div className="part-3 w-[22%] flex flex-col gap-3 text-left border-r-[1px] border-gray-200 pr-5">
               <h2 className="font-[500] text-lg">Danh mục sản phẩm</h2>
               <ul className="list-none space-y-3">
-                <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
-                    Món ăn vặt
-                  </Link>
-                </li>
-                <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
-                    Đồ uống
-                  </Link>
-                </li>
-                <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
-                    Bánh kẹo
-                  </Link>
-                </li>
-                <li className="text-[#3e3e3e] text-[15px]">
-                  <Link to="/" className="hover:text-[#ff5252]">
-                    Hóa phẩm
-                  </Link>
-                </li>
+                {context?.catData?.map((cat) => (
+                  <li className="text-[#3e3e3e] text-[15px]">
+                    <Link
+                      to={`/product-list?catId=${cat?._id}`}
+                      className="hover:text-[#ff5252]"
+                    >
+                      {cat.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
             <div className="part-4 w-[26%] flex flex-col gap-3 text-left">
               <h2 className="font-[500] text-lg">Liên hệ với chúng tôi</h2>
-              <Link
-                to="mailto:onimarket@gmail.com"
-                className="hover:text-[#ff5252] text-[#3e3e3e] text-[15px]"
-              >
-                onimarket@gmail.com
-              </Link>
+              huyenmeroria@gmail.com
               <span className="text-[#ff5252] text-[15px]">
                 (+84) 966 556 026
               </span>
@@ -203,11 +188,15 @@ function Footer() {
             {context?.openProductDetailsModal?.item?.length !== 0 && (
               <>
                 <div className="col-1 w-[40%] mx-3 my-8">
-                  <ProductZoom images={context?.openProductDetailsModal?.item?.images} />
+                  <ProductZoom
+                    images={context?.openProductDetailsModal?.item?.images}
+                  />
                 </div>
 
                 <div className="col-2 w-[60%] px-7 py-8 product-content-container">
-                  <ProductDetailsContent item={context?.openProductDetailsModal?.item} />
+                  <ProductDetailsContent
+                    item={context?.openProductDetailsModal?.item}
+                  />
                 </div>
               </>
             )}

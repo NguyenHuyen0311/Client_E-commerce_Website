@@ -14,7 +14,7 @@ function Navigation() {
   const [innersubMenuIndex, setInnerSubMenuIndex] = useState(null);
 
   const context = useContext(myContext);
-  
+
   useEffect(() => {
     setCatData(context?.catData);
   }, [context?.catData]);
@@ -39,7 +39,7 @@ function Navigation() {
     <nav className="bg-white border-b border-gray-200 transition-all duration-300">
       <div className="container flex flex-col">
         <div className="flex items-center">
-          <div className="w-[30%]">
+          <div className="w-[35%]">
             <div className="flex justify-between items-center py-2">
               <Button
                 className="flex items-center link transition !text-black/90 !capitalize"
@@ -54,7 +54,7 @@ function Navigation() {
               </Button>
             </div>
           </div>
-          <div className="w-[50%]">
+          <div className="w-[35%]">
             <ul className="flex items-center gap-10 mr-1">
               <li>
                 <Link to="/" className="text-[14.5px] hover:text-[#ff5252]">
@@ -70,21 +70,24 @@ function Navigation() {
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-[14.5px] hover:text-[#ff5252]">
+                <Link
+                  to="/blog-list"
+                  className="text-[14.5px] hover:text-[#ff5252]"
+                >
                   Bài viết
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to="/contact"
                   className="text-[14.5px] hover:text-[#ff5252]"
                 >
                   Liên hệ
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
-          <div className="w-[20%]">
+          <div className="w-[30%]">
             <p className="text-[14px] flex items-center gap-2">
               <FaShippingFast className="text-[18px]" /> Chỉ ship trong khu vực
               Hà Nội
@@ -106,9 +109,14 @@ function Navigation() {
                 return (
                   <li
                     key={index}
-                    className={`list-none flex items-center px-2 relative w-[33.33333%] flex-col ${isLast ? "" : "border-r"}`}
+                    className={`list-none flex items-center px-2 relative w-[33.33333%] flex-col ${
+                      isLast ? "" : "border-r"
+                    }`}
                   >
-                    <Link to={`/product-list?catId=${cat?._id}`} className="w-full">
+                    <Link
+                      to={`/product-list?catId=${cat?._id}`}
+                      className="w-full"
+                    >
                       <Button className="w-full !normal-case !text-left !justify-start !px-3 !text-black/80">
                         {cat?.name}
                       </Button>
@@ -133,7 +141,10 @@ function Navigation() {
                           cat?.children?.map((subCat, index_) => {
                             return (
                               <li key={index_} className="list-none relative">
-                                <Link to={`/product-list?subCatId=${subCat?._id}`} className="w-full">
+                                <Link
+                                  to={`/product-list?subCatId=${subCat?._id}`}
+                                  className="w-full"
+                                >
                                   <Button className="w-full !normal-case !text-left !justify-start !px-3 !text-black/80">
                                     {subCat?.name}
                                   </Button>
