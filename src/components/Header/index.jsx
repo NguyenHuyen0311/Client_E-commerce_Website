@@ -62,6 +62,7 @@ function Header() {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userEmail");
+        localStorage.removeItem("actionType");
         context?.setUserData(null);
         context?.setCartData([]);
         context?.setMyWishlistData([]);

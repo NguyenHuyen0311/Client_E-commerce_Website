@@ -4,10 +4,6 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import iconCategory1 from "../../assets/image/icon-doanvatman.png";
-import iconCategory2 from "../../assets/image/icon-doanvatngot.png";
-import iconCategory3 from "../../assets/image/icon-dokhovahatdinhduong.png";
-import iconCategory4 from "../../assets/image/icon-douongvatrasua.png";
 import { Link } from "react-router-dom";
 
 function HomeCategorySlider(props) {

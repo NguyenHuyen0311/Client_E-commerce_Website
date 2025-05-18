@@ -43,7 +43,7 @@ function Checkout() {
       setSelectedAddress(e.target.value);
     }
   };
-  
+
   const checkout = (e) => {
     e.preventDefault();
   };
@@ -54,7 +54,7 @@ function Checkout() {
     if (!selectedAddress) {
       return context.openAlertBox("error", "Vui lòng chọn địa chỉ giao hàng!");
     }
-    
+
     const payLoad = {
       userId: user?._id,
       products: context?.cartData,
@@ -78,6 +78,45 @@ function Checkout() {
         history("/my-orders");
       } else {
         context.openAlertBox("error", res?.message);
+      }
+    });
+  };
+
+  const paymentWithCard = () => {
+    const user = context?.userData;
+  
+    if (!selectedAddress) {
+      return context.openAlertBox("error", "Vui lòng chọn địa chỉ giao hàng!");
+    }
+  
+    const payLoad = {
+      userId: user?._id,
+      products: context?.cartData.map((item) => ({
+        productId: item._id,
+        productTitle: item.productTitle,
+        quantity: item.quantity,
+        price: item.price,
+        image: item.image,
+        subTotal: item.quantity * item.price,
+        countInStock: !isNaN(item.countInStock) ? item.countInStock : 0,
+      })),
+      payment_status: "Thanh toán qua thẻ",
+      delivery_address: selectedAddress,
+      totalAmount: context?.cartData
+        ?.map((item) => parseInt(item.price) * item.quantity)
+        .reduce((total, value) => total + value, 0), // Pass as a number
+      date: new Date().toLocaleString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }),
+    };
+  
+    postData(`/api/order/create-vnpay-url`, payLoad).then((res) => {
+      if (res?.url) {
+        window.location.href = res.url; 
+      } else {
+        context.openAlertBox("error", "Không tạo được liên kết thanh toán.");
       }
     });
   };
@@ -214,6 +253,7 @@ function Checkout() {
               </div>
 
               <Button
+                onClick={paymentWithCard}
                 type="submit"
                 className="btn-org w-full flex items-center gap-2 !mb-3"
               >

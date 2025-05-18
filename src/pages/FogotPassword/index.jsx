@@ -57,8 +57,11 @@ function ForgotPassword() {
       return false;
     }
 
-    postData(`/api/user/reset-password`, formFields).then((res) => {
-      if(res?.error === false) {
+    postData(`/api/user/reset-password`, {
+      ...formFields,
+      actionType: "forgot-password",
+    }).then((res) => {
+      if (res?.error === false) {
         localStorage.removeItem("userEmail");
         localStorage.removeItem("actionType");
 
@@ -68,9 +71,9 @@ function ForgotPassword() {
         history("/login");
       } else {
         context.openAlertBox("error", res?.message);
+        setIsLoading(false);
       }
-      
-    })
+    });
   };
 
   return (
