@@ -13,17 +13,33 @@ function ProductDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [reviewsCount, setReviewsCount] = useState(0);
   const [relatedProductData, setRelatedProductData] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
 
   const { id } = useParams();
   const reviewSection = useRef();
 
   useEffect(() => {
-    fetchDataFromApi(`/api/user/get-review?productId=${id}`).then((res) => {
-      if (res?.error === false) {
-        setReviewsCount(res?.reviews?.length);
-      }
-    });
-  }, [reviewsCount]);
+    fetchDataFromApi(`/api/user/get-review?productId=${id}`)
+      .then((res) => {
+        if (res?.error === false) {
+          setReviewsCount(res?.reviews?.length);
+
+          if (res?.reviews.length > 0) {
+            const totalStars = res?.reviews.reduce(
+              (acc, review) => acc + (Number(review.rating) || 0),
+              0
+            );
+            const avg = totalStars / res?.reviews.length;
+            setAverageRating(Number(avg.toFixed(1)));
+          } else {
+            setAverageRating(0);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Fetch reviews error", error);
+      });
+  }, [id]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -78,6 +94,7 @@ function ProductDetails() {
                 <ProductDetailsContent
                   gotoReviews={gotoReviews}
                   reviewsCount={reviewsCount}
+                  averageRating={averageRating}
                   item={productData}
                 />
               </div>
@@ -124,6 +141,7 @@ function ProductDetails() {
                     <Reviews
                       productId={productData?._id}
                       setReviewsCount={setReviewsCount}
+                      setAverageRating={setAverageRating}
                     />
                   )}
                 </>

@@ -90,7 +90,7 @@ function ProductDetailsContent(props) {
         <span className="mt-1">
           <Rating
             name="size-small"
-            value={props?.item?.rating}
+            value={Math.round(props?.averageRating || 5)}
             size="small"
             readOnly
           />

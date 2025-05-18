@@ -62,8 +62,21 @@ const Reviews = (props) => {
     fetchDataFromApi(`/api/user/get-review?productId=${props?.productId}`).then(
       (res) => {
         if (res?.error === false) {
-          setReviewsData(res?.reviews);
-          props?.setReviewsCount(res?.reviews?.length);
+          const sortedReviews = res.reviews.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        setReviewsData(sortedReviews);
+        props?.setReviewsCount(sortedReviews.length);
+
+          if (props?.setAverageRating) {
+          const totalStars = res?.reviews.reduce(
+            (acc, review) => acc + (Number(review.rating) || 0),
+            0
+          );
+          const avg = totalStars / res?.reviews.length || 0;
+          props.setAverageRating(Number(avg.toFixed(1)));
+        }
         }
       }
     );
@@ -84,7 +97,16 @@ const Reviews = (props) => {
                 >
                   <div className="info w-[60%] flex items-center gap-3">
                     <div className="img w-[60px] !min-w-[60px] h-[60px] overflow-hidden rounded-full">
-                      <img className="w-full h-full" src={item?.image} />
+                      {
+                        context?.userData?.avatar === "" ? (
+                          <img
+                            src="/user-avatar-default.png"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <img className="w-full h-full object-cover" src={item?.image} />
+                        )
+                      }
                     </div>
 
                     <div className="w-[100%]">
